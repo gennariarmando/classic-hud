@@ -1,0 +1,119 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  CHudNew.cpp
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(285): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(286): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(614): warning C4305: '=': truncation from 'double' to 'float'
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(623): warning C4305: '=': truncation from 'double' to 'float'
+CHudNew.cpp(313): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(321): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(329): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(337): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(345): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(353): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(361): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(369): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(385): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(393): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(409): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(559): warning C4018: '<': signed/unsigned mismatch
+CHudNew.cpp(580): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(605): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(629): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(638): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(651): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(651): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(655): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(655): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(670): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(670): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(674): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(674): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(688): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(688): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(693): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(693): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(702): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(702): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(706): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(706): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(738): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(738): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(739): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(739): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(773): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(773): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(774): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(774): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(808): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(808): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(809): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(809): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(851): warning C4101: 'CClock': unreferenced local variable
+CHudNew.cpp(882): warning C4018: '>': signed/unsigned mismatch
+CHudNew.cpp(883): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(887): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(895): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(925): warning C4305: 'argument': truncation from 'double' to 'float'
+CHudNew.cpp(939): warning C4305: 'argument': truncation from 'double' to 'float'
+CHudNew.cpp(983): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(984): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(984): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(986): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(987): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(987): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(990): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(990): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(992): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(993): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(993): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(995): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(996): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(996): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(998): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(999): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(999): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(1001): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1002): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(1002): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(1078): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+CHudNew.cpp(1079): warning C4244: 'argument': conversion from 'RwInt32' to 'float', possible loss of data
+CHudNew.cpp(1102): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+CHudNew.cpp(1108): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1112): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+CHudNew.cpp(1118): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1121): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+CHudNew.cpp(1128): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1147): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+CHudNew.cpp(1169): warning C4244: 'argument': conversion from 'RwInt32' to 'float', possible loss of data
+CHudNew.cpp(1173): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(1175): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1176): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1177): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1179): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
+CHudNew.cpp(1184): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1184): warning C4244: 'argument': conversion from 'double' to 'signed char', possible loss of data
+CHudNew.cpp(1184): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(1184): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(1186): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1191): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1191): warning C4244: 'argument': conversion from 'double' to 'signed char', possible loss of data
+CHudNew.cpp(1191): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(1191): warning C4244: 'argument': conversion from 'float' to 'unsigned short', possible loss of data
+CHudNew.cpp(1193): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1208): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1211): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1215): warning C4244: 'argument': conversion from 'float' to 'unsigned char', possible loss of data
+CHudNew.cpp(1220): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+CHudNew.cpp(1222): warning C4244: 'argument': conversion from 'RwInt32' to 'float', possible loss of data
+CHudNew.cpp(1060): warning C4101: 'myText': unreferenced local variable
+CHudNew.cpp(1244): warning C4305: 'argument': truncation from 'double' to 'float'
+  Main.cpp
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(285): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(286): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(614): warning C4305: '=': truncation from 'double' to 'float'
+d:\documents\visual studio\projects\classichud\classichud\Main.hpp(623): warning C4305: '=': truncation from 'double' to 'float'
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1193,5): warning MSB8030: The linker switch "Minimum Required Version" requires "SubSystem" to be set.  Without "SubSystem", the "Minimum Required Version" would not be passed to linker and could prevent to the output binary from running on older Operating Systems.
+  CHudNew.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  Generating code
+  Finished generating code
+  ClassicHud.vcxproj -> D:\Program Files\Games\Steam Library\SteamApps\common\Grand Theft Auto San Andreas\ClassicHud.asi
