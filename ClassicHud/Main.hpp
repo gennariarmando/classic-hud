@@ -26,18 +26,6 @@
 #define Menu_WidescreenOn (*(unsigned __int8 *)0xBA6793)
 #define ZoneToPrint ((char *)0xBAB1D0)
 
-static float fProperWidthMultiplier = 480.0f / 448.0f;
-static float fProperHeightMultiplier = 448.0f / 480.0f;
-
-#define _x(a) (RsGlobal.maximumWidth - fProperWidthMultiplier * (a))
-#define _xleft(a) (fProperWidthMultiplier * (a))
-#define _xmiddle(a) ((RsGlobal.maximumWidth / 2) + fProperWidthMultiplier * (a))
-#define _y(a) (fProperHeightMultiplier * (a))
-#define _ydown(a) (RsGlobal.maximumHeight - fProperHeightMultiplier * (a))
-#define _ymiddle(a) ((RsGlobal.maximumHeight / 2) + fProperHeightMultiplier * (a))
-#define _width(a) _xleft(a)
-#define _height(a) _y(a)
-
 // Plugin-SDK
 #include <plugin.h>
 #include "game_sa\CClock.h"
