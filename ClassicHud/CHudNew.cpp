@@ -1,11 +1,10 @@
 #include "Main.hpp"
 
-#define	ENERGY_LOSS_FLASH_DURATION	1000
+#define	ENERGY_LOSS_FLASH_DURATION 1000
 
 using namespace plugin;
 
 short& m_ItemToFlash = *(short*)0xBAB1DC;
-char* m_Message = (char*)0xBAB040;
 
 CSprite2d hudIcons[10];
 CSprite2d sprite;
@@ -15,8 +14,6 @@ CSprite2d window;
 CRGBA AreaCRGBA;
 
 unsigned int m_CurrentStar;
-
-bool draw_area = 1;
 
 class CHudNew {
 public:
