@@ -134,384 +134,288 @@ public:
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_DILDO2:
 				sprite = weaponicons[2];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_VIBE1:
 				sprite = weaponicons[3];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_VIBE2:
 				sprite = weaponicons[4];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_FLOWERA:
 				sprite = weaponicons[5];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_CANE:
 				sprite = weaponicons[6];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_BOXWEE:
 				sprite = weaponicons[7];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_BOXBIG:
 				sprite = weaponicons[8];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_CELLPHONE:
 				sprite = weaponicons[9];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_BRASSKNUCKLE:
 				sprite = weaponicons[10];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GOLFCLUB:
 				sprite = weaponicons[11];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_NITESTICK:
 				sprite = weaponicons[12];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_KNIFECUR:
 				sprite = weaponicons[13];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_BAT:
 				sprite = weaponicons[14];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SHOVEL:
 				sprite = weaponicons[15];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_POOLCUE:
 				sprite = weaponicons[16];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_KATANA:
 				sprite = weaponicons[17];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_CHNSAW:
 				sprite = weaponicons[18];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GRENADE:
 				sprite = weaponicons[19];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_TEARGAS:
 				sprite = weaponicons[20];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_MOLOTOV:
 				sprite = weaponicons[21];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_MISSILE:
 				sprite = weaponicons[22];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_COLT45:
 				sprite = weaponicons[23];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(69)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SILENCED:
 				sprite = weaponicons[24];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(70)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_DESERT_EAGLE:
 				sprite = weaponicons[25];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(71)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_CHROMEGUN:
 				sprite = weaponicons[26];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(72)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SAWNOFF:
 				sprite = weaponicons[27];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(73)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SHOTGSPA:
 				sprite = weaponicons[28];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(74)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_MICRO_UZI:
 				sprite = weaponicons[29];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(75)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_MP5LNG:
 				sprite = weaponicons[30];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(76)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_FLARE:
 				sprite = weaponicons[31];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_AK47:
 				sprite = weaponicons[32];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(77)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_M4:
 				sprite = weaponicons[33];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(78)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_CUNTGUN:
 				sprite = weaponicons[34];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SNIPER:
 				sprite = weaponicons[35];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(79)* 0.001 * 100.0;
 				STAT_WEP_ALPHA = 255;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_ROCKETLA:
 				sprite = weaponicons[36];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_HEATSEEK:
 				sprite = weaponicons[37];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_FLAME:
 				sprite = weaponicons[38];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_MINIGUN:
 				sprite = weaponicons[39];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SATCHEL:
 				sprite = weaponicons[40];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_BOMB:
 				sprite = weaponicons[41];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_SPRAYCAN:
 				sprite = weaponicons[42];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_FIRE_EX:
 				sprite = weaponicons[43];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_CAMERA:
 				sprite = weaponicons[44];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_NVGOGGLES:
 				sprite = weaponicons[45];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_IRGOGGLES:
 				sprite = weaponicons[46];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_JETPACK:
 				sprite = weaponicons[47];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_GUN_PARA:
 				sprite = weaponicons[48];
 				PrintIcon();
 				stat3_2 = CStats::GetStatValue(0);
 				STAT_WEP_ALPHA = 50;
 				break;
-			}
-			switch (modelId) {
 			case MODEL_TEC9:
 				sprite = weaponicons[49];
 				PrintIcon();
@@ -521,6 +425,7 @@ public:
 			}
 		}
 	}
+	
 
 	static void HudTextures(int index) {
 		CTxdStore::LoadTxd(index, hudfilename);
