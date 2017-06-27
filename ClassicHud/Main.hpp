@@ -1,7 +1,6 @@
 #pragma once
 
 #define g_pHelpMessage ((char *)0xBAA7A0)
-#define m_pLastHelpMessage ((char *)0xBAA610)
 #define g_HelpMessageState (*(__int32 *)0xBAA474)
 #define g_HelpMessageTimer (*(signed __int32 *)0xBAA47C)
 #define g_HelpMessageFadeTimer (*(signed __int32 *)0xBAA478)
@@ -57,6 +56,7 @@ static int Enable;
 static int Ultra;
 static int Style;
 static int SquareBar;
+static int Percentage;
 static int DrawBarChart;
 static int MoneyCounter;
 static int StatBox;
@@ -291,6 +291,7 @@ static void Ini()
 	MoneyCounter = iniReader.ReadInteger("HUD", "iMinimalMoneyCounter", 0);
 	StatBox = iniReader.ReadInteger("HUD", "iMinimalStatsBox", 0);
 	SquareBar = iniReader.ReadInteger("HUD", "iSquareBar", 0);
+    Percentage = iniReader.ReadInteger("HUD", "iShowPercentage", 0);
 	
 	RADAR_RANGE = iniReader.ReadFloat("RADAR", "fRadarRange", 0.0f);
 	RADAR_COLOUR_A = iniReader.ReadRGBA("RADAR", "iRadarAlpha", 255);
@@ -1087,4 +1088,158 @@ static void Ini()
 
 		SetTextBasedOnStyle = "ClassicHud - CUSTOM";
 	}
+
+    if (Style == 5) {
+        // hudColor Advance
+        HUD_COLOUR_HEALTH_R = 242;
+        HUD_COLOUR_HEALTH_G = 53;
+        HUD_COLOUR_HEALTH_B = 31;
+        HUD_COLOUR_HEALTH_A = 255;
+
+        HUD_COLOUR_ARMOUR_R = 40;
+        HUD_COLOUR_ARMOUR_G = 248;
+        HUD_COLOUR_ARMOUR_B = 40;
+        HUD_COLOUR_ARMOUR_A = 255;
+
+        HUD_COLOUR_BREATH_R = 220;
+        HUD_COLOUR_BREATH_G = 235;
+        HUD_COLOUR_BREATH_B = 255;
+        HUD_COLOUR_BREATH_A = 255;
+
+        HUD_COLOUR_MONEY_R = 88;
+        HUD_COLOUR_MONEY_G = 219;
+        HUD_COLOUR_MONEY_B = 239;
+        HUD_COLOUR_MONEY_A = 255;
+
+        HUD_COLOUR_CLOCK_R = 209;
+        HUD_COLOUR_CLOCK_G = 165;
+        HUD_COLOUR_CLOCK_B = 138;
+        HUD_COLOUR_CLOCK_A = 255;
+
+        HUD_DROPCOLOUR_CLOCK_R = 0;
+        HUD_DROPCOLOUR_CLOCK_G = 0;
+        HUD_DROPCOLOUR_CLOCK_B = 0;
+        HUD_DROPCOLOUR_CLOCK_A = 255;
+
+        HUD_COLOUR_AMMO_R = 0;
+        HUD_COLOUR_AMMO_G = 0;
+        HUD_COLOUR_AMMO_B = 0;
+
+        HUD_DROPCOLOUR_AMMO_R = 252;
+        HUD_DROPCOLOUR_AMMO_G = 175;
+        HUD_DROPCOLOUR_AMMO_B = 1;
+
+        HUD_COLOUR_STAR_R = 193;
+        HUD_COLOUR_STAR_G = 166;
+        HUD_COLOUR_STAR_B = 121;
+        HUD_COLOUR_SHADOWSTAR_A = 255;
+        HUD_COLOUR_SHADOWSTAR_A2 = 255;
+        HUD_COLOUR_SHADOWSTAR_A3 = 255;
+
+        HUD_COLOUR_STARBACK_R = 0;
+        HUD_COLOUR_STARBACK_G = 0;
+        HUD_COLOUR_STARBACK_B = 0;
+
+        HUD_COLOUR_AREA_R = 255;
+        HUD_COLOUR_AREA_G = 203;
+        HUD_COLOUR_AREA_B = 7;
+
+        HUD_COLOUR_VEHICLE_R = 255;
+        HUD_COLOUR_VEHICLE_G = 203;
+        HUD_COLOUR_VEHICLE_B = 7;
+
+        HUD_COLOUR_STATBAR_R = 219;
+        HUD_COLOUR_STATBAR_G = 155;
+        HUD_COLOUR_STATBAR_B = 0;
+
+        MAP_COLOUR_ARROW_R = 255;
+        MAP_COLOUR_ARROW_G = 255;
+        MAP_COLOUR_ARROW_B = 255;
+
+        HUD_COLOUR_WEAPON_A = 255;
+
+        HUD_COLOUR_WB_R = 180;
+        HUD_COLOUR_WB_G = 100;
+        HUD_COLOUR_WB_B = 50;
+
+        // hudPosition Advance
+        HUD_WEAPON_POS_X = 180.0f;
+        HUD_WEAPON_POS_Y = 48.0f;
+        HUD_WEAPON_SIZE_X = 117.0f;
+        HUD_WEAPON_SIZE_Y = 115.5f;
+
+        HUD_AMMO_POS_X = 122.5f;
+        HUD_AMMO_POS_Y = 132.0f;
+        HUD_AMMO_SIZE_X = 0.72f;
+        HUD_AMMO_SIZE_Y = 1.38f;
+
+        HUD_HEALTH_POS_X = 196.8f;
+        HUD_HEALTH_POS_Y = 118.8f;
+        HUD_HEALTH_SIZE_X = 1.41f;
+        HUD_HEALTH_SIZE_Y = 2.46f;
+
+        HUD_ARMOUR_POS_X = 326.4f;
+        HUD_ARMOUR_POS_Y = 118.8f;
+        HUD_ARMOUR_SIZE_X = 1.38f;
+        HUD_ARMOUR_SIZE_Y = 2.45f;
+
+        HUD_BREATH_POS_X = 326.4f;
+        HUD_BREATH_POS_X_2 = 127.2f;
+        HUD_BREATH_POS_Y = 118.8f;
+        HUD_BREATH_SIZE_X = 1.38f;
+        HUD_BREATH_SIZE_Y = 2.46f;
+        HUD_BREATHICON_POS_X = 448.8f;
+        HUD_BREATHICON_POS_Y = 126.0f;
+        HUD_BREATHICON_SIZE_X = 36.0f;
+        HUD_BREATHICON_SIZE_Y = 31.5f;
+
+        HUD_HEALTHICON_POS_X = 322.8f;
+        HUD_HEALTHICON_POS_Y = 126.0f;
+        HUD_HEALTHICON_SIZE_X = 37.5f;
+        HUD_HEALTHICON_SIZE_Y = 31.5f;
+
+        HUD_ARMOURICON_POS_X = 448.8f;
+        HUD_ARMOURICON_POS_Y = 126.0f;
+        HUD_ARMOURICON_SIZE_X = 36.0f;
+        HUD_ARMOURICON_SIZE_Y = 31.5f;
+
+        HUD_MONEY_POS_X = 196.8f;
+        HUD_MONEY_POS_Y = 78.0f;
+        HUD_MONEY_SIZE_X = 1.38f;
+        HUD_MONEY_SIZE_Y = 2.46f;
+
+        HUD_GLOBAL_SHADOW = 1;
+
+        HUD_CLOCK_POS_X = 196.8f;
+        HUD_CLOCK_POS_Y = 40.8f;
+        HUD_CLOCK_SIZE_X = 1.404f;
+        HUD_CLOCK_SIZE_Y = 2.46f;
+
+        HUD_STAR_POS_X = 102.0f;
+        HUD_STAR_POS_Y = 166.0f;
+        HUD_STAR_SIZE_X = 42.0f;
+        HUD_STAR_SIZE_Y = 39.0f;
+
+        HUD_STAR_SPACE = 42.0f;
+
+        HUD_AREA_POS_X = 50.0f;
+        HUD_AREA_POS_Y = 80.0f;
+        HUD_AREA_SIZE_X = 1.5f;
+        HUD_AREA_SIZE_Y = 3.0f;
+
+        HUD_AREA_FONT = FONT_MENU;
+
+        HUD_VEHICLE_POS_X = 50.0f;
+        HUD_VEHICLE_POS_Y = 80.0f;
+        HUD_VEHICLE_SIZE_X = 1.5f;
+        HUD_VEHICLE_SIZE_Y = 3.0f;
+
+        HUD_VEHICLE_FONT = FONT_MENU;
+
+        hudfilename = ".\\CLASSICHUD\\TXD\\HUD\\HUD_ADV.TXD";
+        fontfilename = ".\\CLASSICHUD\\TXD\\FONTS\\FONTS_ADV.TXD";
+        fontdatafilename = ".\\CLASSICHUD\\DATA\\FONTS\\FONTS_ADV.DAT";
+
+        SetTextBasedOnStyle = "ClassicHud - Advance";
+    }
 }

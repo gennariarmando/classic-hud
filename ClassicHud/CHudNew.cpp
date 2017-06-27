@@ -1,7 +1,5 @@
 #include "Main.hpp"
 
-#define	ENERGY_LOSS_FLASH_DURATION 1000
-
 using namespace plugin;
 
 short& m_ItemToFlash = *(short*)0xBAB1DC;
@@ -13,14 +11,10 @@ CSprite2d window;
 
 CRGBA AreaCRGBA;
 
-unsigned int m_CurrentStar;
-
 class CHudNew {
 public:
 	static void ClassicHudTextures() {
-		int v0;
-
-		v0 = CTxdStore::AddTxdSlot("classichud");
+		int v0 = CTxdStore::AddTxdSlot("classichud");
 		CTxdStore::LoadTxd(v0, ".\\CLASSICHUD\\TXD\\CLASSICHUD.TXD");
 		CTxdStore::AddRef(v0);
 		CTxdStore::PushCurrentTxd();
@@ -37,9 +31,7 @@ public:
 	}
 
 	static void WeaponTextures() {
-		int v1;
-
-		v1 = CTxdStore::AddTxdSlot("weapons");
+		int v1 = CTxdStore::AddTxdSlot("weapons");
 		if (Style == 0) {
 			CTxdStore::LoadTxd(v1, ".\\CLASSICHUD\\TXD\\WEAPONS\\WEAPONS_III.TXD");
 		}
@@ -55,6 +47,9 @@ public:
 		if (Style == 4) {
 			CTxdStore::LoadTxd(v1, ".\\CLASSICHUD\\TXD\\WEAPONS\\WEAPONS_CUSTOM.TXD");
 		}
+        if (Style == 5) {
+            CTxdStore::LoadTxd(v1, ".\\CLASSICHUD\\TXD\\WEAPONS\\WEAPONS_ADVANCE.TXD");
+        }
 		CTxdStore::AddRef(v1);
 		CTxdStore::PushCurrentTxd();
 		CTxdStore::SetCurrentTxd(v1);
@@ -111,6 +106,74 @@ public:
 		CTxdStore::PopCurrentTxd();
 	}
 
+    static void ClassicHudTextureShutdown() {
+        hudIcons[0].Delete();
+        hudIcons[1].Delete();
+        hudIcons[2].Delete();
+        hudIcons[3].Delete();
+        hudIcons[4].Delete();
+        hudIcons[5].Delete();
+        hudIcons[6].Delete();
+        hudIcons[7].Delete();
+        int v0 = CTxdStore::FindTxdSlot("classichud");
+        CTxdStore::RemoveTxdSlot(v0);
+    }
+
+    static void WeaponTexturesShutdown() {
+        weaponicons[0].Delete();
+        weaponicons[1].Delete();
+        weaponicons[2].Delete();
+        weaponicons[3].Delete();
+        weaponicons[4].Delete();
+        weaponicons[5].Delete();
+        weaponicons[6].Delete();
+        weaponicons[7].Delete();
+        weaponicons[8].Delete();
+        weaponicons[9].Delete();
+        weaponicons[10].Delete();
+        weaponicons[11].Delete();
+        weaponicons[12].Delete();
+        weaponicons[13].Delete();
+        weaponicons[14].Delete();
+        weaponicons[15].Delete();
+        weaponicons[16].Delete();
+        weaponicons[17].Delete();
+        weaponicons[18].Delete();
+        weaponicons[19].Delete();
+        weaponicons[20].Delete();
+        weaponicons[21].Delete();
+        weaponicons[22].Delete();
+        weaponicons[23].Delete();
+        weaponicons[24].Delete();
+        weaponicons[25].Delete();
+        weaponicons[26].Delete();
+        weaponicons[27].Delete();
+        weaponicons[28].Delete();
+        weaponicons[29].Delete();
+        weaponicons[30].Delete();
+        weaponicons[31].Delete();
+        weaponicons[32].Delete();
+        weaponicons[33].Delete();
+        weaponicons[34].Delete();
+        weaponicons[35].Delete();
+        weaponicons[36].Delete();
+        weaponicons[37].Delete();
+        weaponicons[38].Delete();
+        weaponicons[39].Delete();
+        weaponicons[40].Delete();
+        weaponicons[41].Delete();
+        weaponicons[42].Delete();
+        weaponicons[43].Delete();
+        weaponicons[44].Delete();
+        weaponicons[45].Delete();
+        weaponicons[46].Delete();
+        weaponicons[47].Delete();
+        weaponicons[48].Delete();
+        weaponicons[49].Delete();
+        int v1 = CTxdStore::FindTxdSlot("weapons");
+        CTxdStore::RemoveTxdSlot(v1);
+    }
+
 	static void PrintIcon() {
 		RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEZTESTENABLE, 0);
 		sprite.Draw(RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_WEAPON_POS_X), SCREEN_COORD(HUD_POS_Y + HUD_WEAPON_POS_Y), SCREEN_MULTIPLIER(HUD_WEAPON_SIZE_X), SCREEN_MULTIPLIER(HUD_WEAPON_SIZE_Y), CRGBA(255, 255, 255, HUD_COLOUR_WEAPON_A));
@@ -119,11 +182,11 @@ public:
 
 	static void DrawWeaponIcon(CPed *player) {
 		RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void *)rwFILTERLINEAR);
-		int modelId = CWeaponInfo::GetWeaponInfo(player->m_aWeapons[player->m_nActiveWeaponSlot].m_Type, 1)->m_dwModelId1;
+		int modelId = CWeaponInfo::GetWeaponInfo((eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1;
 		if (modelId <= 0) {
 			sprite = weaponicons[0];
 			PrintIcon();
-			stat3_2 = CStats::GetStatValue(0);
+			stat3_2 = CStats::GetStatValue(-1);
 			STAT_WEP_ALPHA = 50;
 		}
 		else {
@@ -131,133 +194,133 @@ public:
 			case MODEL_GUN_DILDO1:
 				sprite = weaponicons[1];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_DILDO2:
 				sprite = weaponicons[2];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_VIBE1:
 				sprite = weaponicons[3];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_VIBE2:
 				sprite = weaponicons[4];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_FLOWERA:
 				sprite = weaponicons[5];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_CANE:
 				sprite = weaponicons[6];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_BOXWEE:
 				sprite = weaponicons[7];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_BOXBIG:
 				sprite = weaponicons[8];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_CELLPHONE:
 				sprite = weaponicons[9];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_BRASSKNUCKLE:
 				sprite = weaponicons[10];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GOLFCLUB:
 				sprite = weaponicons[11];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_NITESTICK:
 				sprite = weaponicons[12];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_KNIFECUR:
 				sprite = weaponicons[13];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_BAT:
 				sprite = weaponicons[14];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_SHOVEL:
 				sprite = weaponicons[15];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_POOLCUE:
 				sprite = weaponicons[16];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_KATANA:
 				sprite = weaponicons[17];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_CHNSAW:
 				sprite = weaponicons[18];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GRENADE:
 				sprite = weaponicons[19];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_TEARGAS:
 				sprite = weaponicons[20];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_MOLOTOV:
 				sprite = weaponicons[21];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_MISSILE:
 				sprite = weaponicons[22];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_COLT45:
@@ -311,7 +374,7 @@ public:
 			case MODEL_FLARE:
 				sprite = weaponicons[31];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 255;
 				break;
 			case MODEL_AK47:
@@ -329,7 +392,7 @@ public:
 			case MODEL_CUNTGUN:
 				sprite = weaponicons[34];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_SNIPER:
@@ -341,85 +404,85 @@ public:
 			case MODEL_ROCKETLA:
 				sprite = weaponicons[36];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_HEATSEEK:
 				sprite = weaponicons[37];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_FLAME:
 				sprite = weaponicons[38];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_MINIGUN:
 				sprite = weaponicons[39];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_SATCHEL:
 				sprite = weaponicons[40];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_BOMB:
 				sprite = weaponicons[41];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_SPRAYCAN:
 				sprite = weaponicons[42];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_FIRE_EX:
 				sprite = weaponicons[43];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_CAMERA:
 				sprite = weaponicons[44];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_NVGOGGLES:
 				sprite = weaponicons[45];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_IRGOGGLES:
 				sprite = weaponicons[46];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_JETPACK:
 				sprite = weaponicons[47];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_GUN_PARA:
 				sprite = weaponicons[48];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			case MODEL_TEC9:
 				sprite = weaponicons[49];
 				PrintIcon();
-				stat3_2 = CStats::GetStatValue(0);
+				stat3_2 = CStats::GetStatValue(-1);
 				STAT_WEP_ALPHA = 50;
 				break;
 			}
@@ -449,13 +512,6 @@ public:
 		CFont::PrintString(RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_AMMO_POS_X), SCREEN_COORD(HUD_POS_Y + HUD_AMMO_POS_Y), string);
 	}
 
-	enum
-	{
-		FLASH_Armour = 3,
-		FLASH_Health = 4,
-		//FLASH_Breath = 10
-	};
-
 	static inline bool ShowFlashingItem(signed int nOnDuration, signed int nOffDuration)
 	{
 		return CTimer::m_snTimeInMillisecondsPauseMode % (nOnDuration + nOffDuration) < nOnDuration;
@@ -471,9 +527,15 @@ public:
 		CFont::SetDropShadowPosition(HUD_GLOBAL_SHADOW);
 		//CFont::SetOutlinePosition(HUD_GLOBAL_OUTLINE);
 		char str[10];
-		sprintf(str, "%03d", (int)fPercentage);
-		if (m_ItemToFlash != FLASH_Health || ShowFlashingItem(300, 300)) {
-			if (CWorld::Players[0].m_dwLastTimeArmourLost == CWorld::Players[0].m_dwLastTimeEnergyLost || CWorld::Players[0].m_dwLastTimeEnergyLost + ENERGY_LOSS_FLASH_DURATION < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
+        CPed *playa = FindPlayerPed(0);
+
+        if (Percentage == 1)
+		    sprintf(str, "%03d", (int)fPercentage);
+        else
+            sprintf(str, "%03d", (int)playa->m_fHealth);
+
+		if (m_ItemToFlash != 3 || ShowFlashingItem(300, 300)) {
+			if (CWorld::Players[0].m_dwLastTimeArmourLost == CWorld::Players[0].m_dwLastTimeEnergyLost || CWorld::Players[0].m_dwLastTimeEnergyLost + 1000 < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
 			{
 				//CFont::PrintString(RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_HEALTH_POS_X + 160.0f), SCREEN_COORD(HUD_POS_Y + HUD_HEALTH_POS_Y), "?");
 				CFont::PrintString(RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_HEALTH_POS_X), SCREEN_COORD(HUD_POS_Y + HUD_HEALTH_POS_Y), str);
@@ -496,9 +558,14 @@ public:
 		CFont::SetDropShadowPosition(HUD_GLOBAL_SHADOW);
 		//CFont::SetOutlinePosition(HUD_GLOBAL_OUTLINE);
 		char str[10];
-		sprintf(str, "%03d", (int)fPercentage);
-		if (m_ItemToFlash != FLASH_Armour || ShowFlashingItem(300, 300)) {
-			if (CWorld::Players[0].m_dwLastTimeArmourLost == 0 || CWorld::Players[0].m_dwLastTimeArmourLost + ENERGY_LOSS_FLASH_DURATION < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
+        CPed *playa = FindPlayerPed(0);
+        if (Percentage == 1)
+            sprintf(str, "%03d", (int)fPercentage);
+        else
+            sprintf(str, "%03d", (int)playa->m_fArmour);
+
+		if (m_ItemToFlash != 4 || ShowFlashingItem(300, 300)) {
+			if (CWorld::Players[0].m_dwLastTimeArmourLost == 0 || CWorld::Players[0].m_dwLastTimeArmourLost + 1000 < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
 			{
 				//CFont::PrintString(RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_HEALTH_POS_X + 160.0f), SCREEN_COORD(HUD_POS_Y + HUD_HEALTH_POS_Y), "?");
 				CFont::PrintString(RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_ARMOUR_POS_X), SCREEN_COORD(HUD_POS_Y + HUD_ARMOUR_POS_Y), str);
@@ -545,8 +612,8 @@ public:
 
 	static void PrintHealthBar(float posX, float posY, WORD wWidth, WORD wHeight, float fPercentage, BYTE drawBlueLine,
 		BYTE drawPercentage, BYTE drawBorder, CRGBA dwColor, CRGBA dwForeColor) {
-		if (m_ItemToFlash != FLASH_Health || ShowFlashingItem(300, 300)) {
-			if (CWorld::Players[0].m_dwLastTimeArmourLost == CWorld::Players[0].m_dwLastTimeEnergyLost || CWorld::Players[0].m_dwLastTimeEnergyLost + ENERGY_LOSS_FLASH_DURATION < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
+		if (m_ItemToFlash != 3 || ShowFlashingItem(300, 300)) {
+			if (CWorld::Players[0].m_dwLastTimeArmourLost == CWorld::Players[0].m_dwLastTimeEnergyLost || CWorld::Players[0].m_dwLastTimeEnergyLost + 1000 < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
 			{
 				RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEZTESTENABLE, 0);
 				if (SquareBar == 1) {
@@ -564,8 +631,8 @@ public:
 
 	static void PrintArmourBar(float posX, float posY, WORD wWidth, WORD wHeight, float fPercentage, BYTE drawBlueLine,
 		BYTE drawPercentage, BYTE drawBorder, CRGBA dwColor, CRGBA dwForeColor) {
-		if (m_ItemToFlash != FLASH_Armour || ShowFlashingItem(300, 300)) {
-			if (CWorld::Players[0].m_dwLastTimeArmourLost == 0 || CWorld::Players[0].m_dwLastTimeArmourLost + ENERGY_LOSS_FLASH_DURATION < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
+		if (m_ItemToFlash != 4 || ShowFlashingItem(300, 300)) {
+			if (CWorld::Players[0].m_dwLastTimeArmourLost == 0 || CWorld::Players[0].m_dwLastTimeArmourLost + 1000 < CTimer::m_snTimeInMilliseconds || ShowFlashingItem(150, 150))
 			{
 				RwEngineInstance->dOpenDevice.fpRenderStateSet(rwRENDERSTATEZTESTENABLE, 0);
 				if (SquareBar == 1) {
@@ -645,6 +712,11 @@ public:
 					drawPercentage, drawBorder, dwColor, dwForeColor);
 			}
 		}
+
+        if (Style == 5) {
+            PrintHealthString(posX, posY, wWidth, wHeight, fPercentage, drawBlueLine,
+                drawPercentage, drawBorder, dwColor, dwForeColor);
+        }
 	}
 
 	static void DrawArmour(float posX, float posY, WORD wWidth, WORD wHeight, float fPercentage, BYTE drawBlueLine,
@@ -680,6 +752,11 @@ public:
 					drawPercentage, drawBorder, dwColor, dwForeColor);
 			}
 		}
+
+        if (Style == 5) {
+            PrintArmourString(posX, posY, wWidth, wHeight, fPercentage, drawBlueLine,
+                drawPercentage, drawBorder, dwColor, dwForeColor);
+        }
 	}
 	
 	static void DrawBreath(float posX, float posY, WORD wWidth, WORD wHeight, float fPercentage, BYTE drawBlueLine,
@@ -715,6 +792,11 @@ public:
 					drawPercentage, drawBorder, dwColor, dwForeColor);
 			}
 		}
+
+        if (Style == 5) {
+            PrintBreathString(posX, posY, wWidth, wHeight, fPercentage, drawBlueLine,
+                drawPercentage, drawBorder, dwColor, dwForeColor);
+        }
 	}
 
 	static void DrawMoney() {
@@ -775,8 +857,8 @@ public:
 	}
 
 	static void DrawWanted() {
-		int nWantedLevel = FindPlayerWanted(-1)->m_dwWantedLevel;
-		int nTimeOfWLChange = FindPlayerWanted(-1)->m_dwLastTimeWantedLevelChanged;
+		int nWantedLevel = FindPlayerWanted(-1)->m_nWantedLevel;
+		int nTimeOfWLChange = FindPlayerWanted(-1)->m_nLastTimeWantedLevelChanged;
 
 		if (nWantedLevel) {
 			float fCurrentPos = RsGlobal.maximumWidth - SCREEN_COORD(HUD_POS_X + HUD_STAR_POS_X);
@@ -947,7 +1029,7 @@ public:
 				((*(unsigned __int32 *)((unsigned int)FindPlayerVehicle(-1, 0) + 0x594)) == 4 ||
 				(*(unsigned __int32 *)((unsigned int)FindPlayerVehicle(-1, 0) + 0x594)) == 3))
 				return fTextBoxPosnXWithRadarAndPlane;
-			else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_Type == WEAPON_PARACHUTE)
+			else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_nType == WEAPON_PARACHUTE)
 				return fTextBoxPosnXWithRadarAndPlane;
 			else return fTextBoxPosnXWithRadar;
 		}
@@ -962,7 +1044,7 @@ public:
 		char myText[300];
 		if (g_pHelpMessage[0])
 		{
-			if (!CMessages::StringCompare(g_pHelpMessage, m_pLastHelpMessage, 400))
+			if (!CMessages::StringCompare(g_pHelpMessage, CHud::m_pLastHelpMessage, 400))
 			{
 				switch (g_HelpMessageState)
 				{
@@ -991,7 +1073,7 @@ public:
 				default:
 					break;
 				}
-				CMessages::StringCopy(m_pLastHelpMessage, g_pHelpMessage, 400);
+				CMessages::StringCopy(CHud::m_pLastHelpMessage, g_pHelpMessage, 400);
 			}
 			alpha = 170.0;
 			if (g_HelpMessageState)
@@ -1025,7 +1107,7 @@ public:
 					{
 						g_HelpMessageFadeTimer = 0;
 						g_HelpMessageState = 2; // FADE_OUT
-						CMessages::StringCopy(g_pHelpMessageToPrint, m_pLastHelpMessage, 400);
+						CMessages::StringCopy(g_pHelpMessageToPrint, CHud::m_pLastHelpMessage, 400);
 					}
 					alpha = g_HelpMessageFadeTimer * 0.001 * 200.0;
 					break;
@@ -1155,7 +1237,6 @@ public:
 	};
 
 	static void DrawBustedWastedMessage(float x, float y, char *str) {
-
 		CFont::SetOutlinePosition(0);
 		CFont::SetDropShadowPosition(1);
 		CFont::SetFontStyle(FONT_PRICEDOWN);
@@ -1170,6 +1251,9 @@ public:
 		if (Enable == 1) {
 			Events::initRwEvent += CHudNew::ClassicHudTextures;
 			Events::initRwEvent += CHudNew::WeaponTextures;
+            Events::shutdownRwEvent += CHudNew::ClassicHudTextureShutdown;
+            Events::shutdownRwEvent += CHudNew::WeaponTexturesShutdown;
+
 			patch::RedirectCall(0x5BA865, CHudNew::HudTextures);
 			patch::RedirectCall(0x5BA6A4, CHudNew::FontTextures);
 			patch::RedirectCall(0x7187DB, CHudNew::FontData);
