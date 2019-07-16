@@ -9,9 +9,11 @@ struct tFontData {
 
 class CFontNew {
 public:
+	static bool ms_bFontsLoaded;
 
 public:
 	static void Initialise();
 	static void Shutdown();
+	static void SetFontStyle(eFontStyle Font);
 	static void InjectPatches();
 };

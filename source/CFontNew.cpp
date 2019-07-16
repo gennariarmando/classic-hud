@@ -7,6 +7,8 @@ using namespace plugin;
 
 tFontData *gFontData = (tFontData *)0xC718B0;
 
+bool CFontNew::ms_bFontsLoaded;
+
 int III_Size[2][208] = {
 	{
 	13, 12, 31, 35, 23, 35, 31,  9,
@@ -27,14 +29,14 @@ int III_Size[2][208] = {
 	21, 21, 21, 32, 23, 22, 22, 22,
 	22, 11, 11, 11, 11, 22, 22, 22,
 	22, 22, 22, 22, 22, 26, 21, 24,
-	27, 16, 27, 27, 27, 27, 27, 27,
-	27, 27, 18, 29, 26, 25, 28, 26,
-	25, 27, 28, 12, 24, 25, 24, 30,
-	27, 29, 26, 26, 25, 26, 25, 26,
-	28, 32, 27, 26, 26, 29, 29, 29,
-	29, 33, 25, 26, 26, 26, 26, 14,
-	14, 14, 14, 29, 29, 29, 29, 26,
-	26, 26, 26, 21, 25, 30, 27, 27
+	12, 26, 26, 26, 26, 26, 26, 26,
+	26, 26, 26, 26, 26, 26, 26, 26,
+	26, 26, 26, 26, 26, 26, 26, 26,
+	26, 26, 26, 26, 26, 18, 26, 26,
+	26, 26, 26, 26, 26, 26, 26, 26,
+	26, 26, 26, 26, 26, 26, 26, 26,
+	20,  0,  0,  0,  0,  0,  0,  0,
+	 0,  0,  0,  0,  0,  0,  0,  0,
 	},
 	
 	{
@@ -56,14 +58,14 @@ int III_Size[2][208] = {
 	19, 19, 19, 30, 19, 19, 19, 19,
 	19, 10, 10, 10, 10, 19, 19, 19,
 	19, 19, 19, 19, 19, 19, 23, 35,
-	20, 18, 19, 19, 21, 19, 19, 19,
-	19, 19, 16, 19, 19, 19, 20, 19,
-	16, 19, 19,  9, 19, 20, 14, 29,
-	19, 19, 19, 19, 19, 19, 21, 19,
-	20, 32, 21, 19, 19, 19, 19, 19,
-	19, 29, 19, 19, 19, 19, 19,  9,
-	19,  9,  9, 19, 19, 19, 19, 19,
-	19, 19, 19, 19, 21, 19, 10,  9
+	12, 19, 19, 19, 19, 19, 19, 19,
+	19, 19, 19, 19, 19, 19, 19, 19,
+	19, 19, 19, 19, 19, 19, 19, 19,
+	19, 19, 19, 19, 19, 11, 19, 19,
+	19, 19, 19, 19, 19, 19, 19, 19,
+	19, 19, 19, 19, 19, 19, 19, 19,
+	19,  0,  0,  0,  0,  0,  0,  0,
+	 0,  0,  0,  0,  0,  0,  0,  0,
 	}
 };
 
@@ -128,57 +130,84 @@ int SA_Size[2][208] = {
 };
 
 void CFontNew::Initialise() {
-	int Slot = CTxdStore::AddTxdSlot("fonts_new");
-	char FileName[128];
-	strcpy_s(FileName, "classichud\\fonts\\"); // Set folder,
-	strcat_s(FileName, CHudNew::GetGamePrefix()); // game prefix,
-	strcat_s(FileName, "_");
-	strcat_s(FileName, "fonts.txd"); // file name.
-	puts(FileName);
-	CTxdStore::LoadTxd(Slot, PLUGIN_PATH(FileName));
-	CTxdStore::AddRef(Slot);
-	CTxdStore::PopCurrentTxd();
-	CTxdStore::SetCurrentTxd(Slot);
+	if (!ms_bFontsLoaded) {
+		int Slot = CTxdStore::AddTxdSlot("fonts_new");
+		char FileName[128];
+		strcpy_s(FileName, "classichud\\fonts\\"); // Set folder,
+		strcat_s(FileName, CHudNew::GetGamePrefix()); // game prefix,
+		strcat_s(FileName, "_");
+		strcat_s(FileName, "fonts.txd"); // file name.
+		puts(FileName);
+		CTxdStore::LoadTxd(Slot, PLUGIN_PATH(FileName));
+		CTxdStore::AddRef(Slot);
+		CTxdStore::PopCurrentTxd();
+		CTxdStore::SetCurrentTxd(Slot);
 
-	CFont::Sprite[0].SetTexture("font2");
-	CFont::Sprite[1].SetTexture("font1");
+		CFont::Sprite[0].SetTexture("font2");
+		CFont::Sprite[1].SetTexture("font1");
 
-	CTxdStore::PopCurrentTxd();
+		CTxdStore::PopCurrentTxd();
 
-	for (int i = 0; i < 208; i++) {
-		if (CHudNew::GetGameMode() == GAMEMODE_III) {
-			gFontData[0].m_propValues[i] = III_Size[0][i];
-			gFontData[1].m_propValues[i] = III_Size[1][i];
-			gFontData[0].m_unpropValue = III_Size[0][192];
-			gFontData[1].m_unpropValue = III_Size[1][192];
+		for (int i = 0; i < 208; i++) {
+			if (CHudNew::GetGameMode() == GAMEMODE_III) {
+				gFontData[0].m_propValues[i] = III_Size[0][i];
+				gFontData[1].m_propValues[i] = III_Size[1][i];
+				gFontData[0].m_unpropValue = III_Size[0][192];
+				gFontData[1].m_unpropValue = III_Size[1][192];
+			}
+			else if (CHudNew::GetGameMode() == GAMEMODE_VC) {
+
+			}
+			else if (CHudNew::GetGameMode() == GAMEMODE_SA) {
+
+			}
+			else if (CHudNew::GetGameMode() == GAMEMODE_LCS) {
+
+			}
+			else if (CHudNew::GetGameMode() == GAMEMODE_VCS) {
+
+			}
+			else if (CHudNew::GetGameMode() == GAMEMODE_ADVANCE) {
+
+			}
 		}
-		else if (CHudNew::GetGameMode() == GAMEMODE_VC) {
 
-		}
-		else if (CHudNew::GetGameMode() == GAMEMODE_SA) {
-
-		}
-		else if (CHudNew::GetGameMode() == GAMEMODE_LCS) {
-
-		}
-		else if (CHudNew::GetGameMode() == GAMEMODE_VCS) {
-
-		}
-		else if (CHudNew::GetGameMode() == GAMEMODE_ADVANCE) {
-
-		}
+		ms_bFontsLoaded = true;
 	}
 }
 
 void CFontNew::Shutdown() {
-	for (int i = 0; i < 2; ++i)
-		CFont::Sprite[i].Delete();
+	if (ms_bFontsLoaded) {
+		for (int i = 0; i < 2; ++i)
+			CFont::Sprite[i].Delete();
 
-	int Slot = CTxdStore::FindTxdSlot("fonts_new");
-	CTxdStore::RemoveTxdSlot(Slot);
+		int Slot = CTxdStore::FindTxdSlot("fonts_new");
+		CTxdStore::RemoveTxdSlot(Slot);
+
+		ms_bFontsLoaded = false;
+	}
+}
+
+void CFontNew::SetFontStyle(eFontStyle Font) {
+	if (Font == FONT_MENU) {
+		CFont::m_FontTextureId = FONT_SUBTITLES;
+		CFont::m_FontStyle = 0;
+	}
+	else if (Font == FONT_PRICEDOWN) {
+		CFont::m_FontTextureId = FONT_SUBTITLES;
+		CFont::m_FontStyle = 0;
+	}
+	else {
+		CFont::m_FontTextureId = Font;
+		CFont::m_FontStyle = 0;
+	}
 }
 
 void CFontNew::InjectPatches() {
 	Events::initRwEvent += Initialise;
 	Events::shutdownRwEvent += Shutdown;
+
+#if GTASA
+	patch::RedirectJump(0x719490, CFontNew::SetFontStyle);
+#endif
 }

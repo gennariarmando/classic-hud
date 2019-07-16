@@ -4,6 +4,7 @@
 #include "CSprite2d.h"
 
 enum eGameMode {
+	GAMEMODE_NULL = -1,
 	GAMEMODE_III,
 	GAMEMODE_VC,
 	GAMEMODE_SA,
@@ -74,20 +75,26 @@ public:
 	static eGameMode ms_nGameMode;
 	static bool ms_bSpritesLoaded;
 	static char *ms_nGamePrefix;
+	static bool ms_bReload;
 
 public:
 	static void Initialise();
 	static void Shutdown();
-	static void DrawPlayerInfo();
-	static void PrintClock();
-	static void PrintMoneyCounter();
-	static void PrintHealth(int PlayerID);
-	static void PrintArmour(int PlayerID);
-	static void PrintBreath(int PlayerID);
-	static void PrintWeaponIcon(int PlayerID);
-	static void PrintAmmo(int PlayerID);
-	static void PrintStatsBox();
-	
+	static void ReInitialise();
+	static void Draw();
+	static void DrawAfterFade();
+	static void PrintClock(float x, float y, float w, float h);
+	static void PrintMoneyCounter(float x, float y, float w, float h);
+	static void PrintHealth(int PlayerID, float x, float y, float w, float h);
+	static void PrintArmour(int PlayerID, float x, float y, float w, float h);
+	static void PrintBreath(int PlayerID, float x, float y, float w, float h);
+	static void PrintWeaponIcon(int PlayerID, float x, float y, float w, float h);
+	static void PrintAmmo(int PlayerID, float x, float y, float w, float h);
+	static void DrawWanted(float x, float y, float w, float h);
+	static void PrintStatsBox(float x, float y, float w, float h);
+	static void DrawAreaName(float x, float y, float w, float h);
+	static void DrawVehicleName(float x, float y, float w, float h);
+
 public:
 	static void DrawProgressBar(float x, float y, float w, float h, float percentage);
 	static void DrawProgressString(CSprite2d sprite, float, float y, float w, float h);
