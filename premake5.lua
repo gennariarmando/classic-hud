@@ -1,4 +1,4 @@
-workspace "ClassicHUD"
+workspace "ClassicHud"
 	configurations { 
 	"ReleaseIII",
 	"ReleaseVC",
@@ -16,7 +16,7 @@ workspace "ClassicHUD"
 	
 	kind "SharedLib"
 	language "C++"
-	targetname "ClassicHUD"
+	targetname "ClassicHud"
 	targetdir "output/asi"
 	targetextension ".asi"
     characterset ("MBCS")
@@ -60,7 +60,7 @@ workspace "ClassicHUD"
 		optimize "Off"
 	filter {}
 	  
-project "ClassicHUD"
+project "ClassicHud"
 filter "configurations:DebugIII"
     defines { "GTA3", "PLUGIN_SGV_10EN" }
 	links { "plugin_iii_d" }
@@ -70,7 +70,7 @@ filter "configurations:DebugIII"
 	}
 	debugdir "$(GTA_III_DIR)"
 	debugcommand "$(GTA_III_DIR)/gta3.exe"
-	postbuildcommands "copy /y \"$(TargetPath)\" \"$(GTA_III_DIR)\\scripts\\ClassicHUD.asi\""
+	postbuildcommands "copy /y \"$(TargetPath)\" \"$(GTA_III_DIR)\\scripts\\ClassicHud.asi\""
 	
 filter "configurations:DebugVC"
 	defines { "GTAVC", "PLUGIN_SGV_10EN" }
@@ -81,7 +81,7 @@ filter "configurations:DebugVC"
 	}
 	debugdir "$(GTA_VC_DIR)"
 	debugcommand "$(GTA_VC_DIR)/gta-vc.exe"
-	postbuildcommands "copy /y \"$(TargetPath)\" \"$(GTA_VC_DIR)\\scripts\\ClassicHUD.asi\""
+	postbuildcommands "copy /y \"$(TargetPath)\" \"$(GTA_VC_DIR)\\scripts\\ClassicHud.asi\""
 	
 filter "configurations:DebugSA"
 	defines { "GTASA", "PLUGIN_SGV_10US" }
@@ -92,7 +92,7 @@ filter "configurations:DebugSA"
 	}
 	debugdir "$(GTA_SA_DIR)"
 	debugcommand "$(GTA_SA_DIR)/gta-sa.exe"
-	postbuildcommands "copy /y \"$(TargetPath)\" \"$(GTA_SA_DIR)\\scripts\\ClassicHUD.asi\""
+	postbuildcommands "copy /y \"$(TargetPath)\" \"$(GTA_SA_DIR)\\scripts\\ClassicHud.asi\""
 	
 filter "configurations:ReleaseIII"
 	defines { "GTA3", "PLUGIN_SGV_10EN" }

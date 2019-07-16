@@ -10,7 +10,8 @@ public:
 	std::string m_nGameMode;
 
 	CRect 
-	m_fClock, m_fMoney, m_fHealth, m_fArmour, m_fBreath, m_fWeapon, m_fAmmo, m_fWanted, m_fZoneName, m_fVehicleName;
+	m_fClock, m_fMoney, m_fHealth, m_fArmour, m_fBreath, m_fWeapon, m_fAmmo, m_fWanted, m_fZoneName, m_fVehicleName,
+	m_fRadioName;
 
 public:
 	void readIni();

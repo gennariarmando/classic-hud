@@ -1,0 +1,20 @@
+#
+# ClassicHUD - VC_HUD.DAT
+# This file contains initial display settings for each HUD component.
+# Please ensure you change the correct values, wrong values will make the modification working improperly.
+#
+
+# ----------------------------------------------------------------------------------------------------------
+# -HUD ITEM NAME-           -POSITION-       -SIZE-		
+# ----------------------------------------------------------------------------------------------------------
+HUD_CLOCK                  110.0   22.0     0.7    1.25 
+HUD_CASH                   110.0   43.0     0.7    1.25
+HUD_HEALTH                 110.0   65.0     0.7    1.25
+HUD_ARMOUR                 182.0   65.0     0.7    1.25
+HUD_BREATH                 254.0   65.0     0.7    1.25
+HUD_WEAPON_ICON             99.0   25.0    35.0   89.0
+HUD_AMMO                    66.0   90.0     0.5    0.8
+HUD_WANTED                 110.0   87.0     0.7    1.25
+HUD_ZONE_NAME               32.0  128.0     1.8    1.7
+HUD_VEHICLE_NAME            32.0  105.0     1.8    1.7
+HUD_RADIO_NAME               0.0   22.0     0.8    1.35

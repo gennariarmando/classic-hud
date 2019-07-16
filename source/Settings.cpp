@@ -7,7 +7,7 @@ using namespace plugin;
 Settings s;
 
 void Settings::readIni() {
-	config_file ini(PLUGIN_PATH("classichud\\settings.ini"));
+	config_file ini(PLUGIN_PATH("classichud\\classichud.ini"));
 
 	READ_BOOL(ini, m_bEnable, "m_bEnable", false);
 	READ_STR(ini, m_nGameMode, "m_nGameMode", "");
@@ -34,4 +34,5 @@ void Settings::readDat() {
 	READ_RECT(dat, m_fWanted, "HUD_WANTED", rect);
 	READ_RECT(dat, m_fZoneName, "HUD_ZONE_NAME", rect);
 	READ_RECT(dat, m_fVehicleName, "HUD_VEHICLE_NAME", rect);
+	READ_RECT(dat, m_fRadioName, "HUD_RADIO_NAME", rect);
 }

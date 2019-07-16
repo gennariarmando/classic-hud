@@ -1,6 +1,7 @@
 #pragma once
 #define BLANK NULL
-#define HUD_SHADOW_SIZE 2
+#define III_VC_SHADOW_SIZE 2
+
 #include "CSprite2d.h"
 
 enum eGameMode {
@@ -82,22 +83,19 @@ public:
 	static void Shutdown();
 	static void ReInitialise();
 	static void Draw();
-	static void DrawAfterFade();
-	static void PrintClock(float x, float y, float w, float h);
-	static void PrintMoneyCounter(float x, float y, float w, float h);
-	static void PrintHealth(int PlayerID, float x, float y, float w, float h);
-	static void PrintArmour(int PlayerID, float x, float y, float w, float h);
-	static void PrintBreath(int PlayerID, float x, float y, float w, float h);
-	static void PrintWeaponIcon(int PlayerID, float x, float y, float w, float h);
-	static void PrintAmmo(int PlayerID, float x, float y, float w, float h);
+	static void DrawClock(float x, float y, float w, float h);
+	static void DrawMoneyCounter(float x, float y, float w, float h);
+	static void DrawHealth(int PlayerID, float x, float y, float w, float h);
+	static void DrawArmour(int PlayerID, float x, float y, float w, float h);
+	static void DrawBreath(int PlayerID, float x, float y, float w, float h);
+	static void DrawWeaponIcon(int PlayerID, float x, float y, float w, float h);
+	static void DrawAmmo(int PlayerID, float x, float y, float w, float h);
 	static void DrawWanted(float x, float y, float w, float h);
-	static void PrintStatsBox(float x, float y, float w, float h);
+	static void DrawStatsBox(float x, float y, float w, float h);
 	static void DrawAreaName(float x, float y, float w, float h);
 	static void DrawVehicleName(float x, float y, float w, float h);
-
-public:
-	static void DrawProgressBar(float x, float y, float w, float h, float percentage);
-	static void DrawProgressString(CSprite2d sprite, float, float y, float w, float h);
+	static void DrawRadioStation(float x, float y, float w, float h);
+	static void DrawProgressBar(float x, float y, float width, float height, float progress, char border, char shadow, CRGBA colorFront, CRGBA colorBack);
 
 public:
 	static eGameMode GetGameMode() { return ms_nGameMode; }

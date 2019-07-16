@@ -17,3 +17,4 @@ HUD_AMMO                    66.0  73.0     0.4    0.6
 HUD_WANTED                  30.0  88.0     0.8    1.35
 HUD_ZONE_NAME               32.0  30.0     1.2    1.2
 HUD_VEHICLE_NAME            32.0  55.0     1.2    1.2
+HUD_RADIO_NAME               0.0  22.0     0.8    1.35
