@@ -1,13 +1,14 @@
 <p align="left"><img src="http://i.imgur.com/e36VULs.png" width="512" height="128"></p>
 
 ### ClassicHud
-An open source re-implementation of the most iconical Heads-up displays from Grand Theft Auto (GTA).
+An open source re-implementation of the most iconical Heads-up displays from the Grand Theft Auto series.
 
 Mainly meant for Grand Theft Auto: San Andreas.
 
 ### Currently available displays:
 - Grand Theft Auto III
 - Grand Theft Auto: Vice City
+- Grand Theft Auto: San Andreas
 
 ### Prerequisites
 - [Premake 5](https://premake.github.io/)

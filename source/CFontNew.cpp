@@ -2,6 +2,7 @@
 #include "CTxdStore.h"
 #include "CFontNew.h"
 #include "CHudNew.h"
+#include "Settings.h"
 
 using namespace plugin;
 
@@ -114,13 +115,7 @@ int SA_Size[2][13 * 16] = {
 void CFontNew::Initialise() {
 	if (!ms_bFontsLoaded) {
 		int Slot = CTxdStore::AddTxdSlot("fonts_new");
-		char FileName[128];
-		strcpy_s(FileName, "classichud\\fonts\\"); // Set folder,
-		strcat_s(FileName, CHudNew::GetGamePrefix()); // game prefix,
-		strcat_s(FileName, "_");
-		strcat_s(FileName, "fonts.txd"); // file name.
-		puts(FileName);
-		CTxdStore::LoadTxd(Slot, PLUGIN_PATH(FileName));
+		CTxdStore::LoadTxd(Slot, PLUGIN_PATH(s.SetFileWithPrefix("classichud\\fonts\\", "fonts.txd")));
 		CTxdStore::AddRef(Slot);
 		CTxdStore::PopCurrentTxd();
 		CTxdStore::SetCurrentTxd(Slot);
@@ -146,8 +141,8 @@ void CFontNew::Initialise() {
 			else if (CHudNew::GetGameMode() == GAMEMODE_SA) {
 				gFontData[0].m_propValues[i] = SA_Size[0][i];
 				gFontData[1].m_propValues[i] = SA_Size[1][i];
-				gFontData[0].m_unpropValue = SA_Size[0][192];
-				gFontData[1].m_unpropValue = SA_Size[1][192];
+				gFontData[0].m_unpropValue = 27;
+				gFontData[1].m_unpropValue = 20;
 			}
 			else if (CHudNew::GetGameMode() == GAMEMODE_LCS) {
 

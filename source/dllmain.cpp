@@ -1,6 +1,7 @@
 #include "plugin.h"
 #include "CFontNew.h"
 #include "CHudNew.h"
+#include "CRadarNew.h"
 #include "Settings.h"
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
@@ -10,6 +11,7 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserve
 		if (s.m_bEnable) {
 			CHudNew::InjectPatches();
 			CFontNew::InjectPatches();
+			CRadarNew::InjectPatches();
 		}
 	}
 	return TRUE;

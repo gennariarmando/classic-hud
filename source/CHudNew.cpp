@@ -6,19 +6,23 @@
 #include "CWorld.h"
 #include "eModelID.h"
 #include "ScreenAddition.h"
-#include "CHudNew.h"
 #include "eWeaponType.h"
 #include "CDarkel.h"
-#include "CFontNew.h"
 #include "CMenuManager.h"
 #include "CTheScripts.h"
 #include "CCamera.h"
-#include "Settings.h"
 #include "CTimer.h"
 #include "CCutsceneMgr.h"
 #include "CEntryExitManager.h"
 #include "CAERadioTrackManager.h"
 #include "CText.h"
+#include "CHudNew.h"
+#include "CFontNew.h"
+#include "CRadarNew.h"
+#include "Settings.h"
+#include "CModelInfo.h"
+#include "CRadar.h"
+#include "CStats.h"
 
 using namespace plugin;
 
@@ -99,13 +103,7 @@ void CHudNew::Initialise() {
 
 	if (!ms_bSpritesLoaded) {
 		int Slot = CTxdStore::AddTxdSlot("weapons");
-		char FileName[128];
-		strcpy_s(FileName, "classichud\\weapons\\"); // Set folder,
-		strcat_s(FileName, GetGamePrefix()); // game prefix,
-		strcat_s(FileName, "_");
-		strcat_s(FileName, "weapons.txd"); // file name.
-		puts(FileName);
-		CTxdStore::LoadTxd(Slot, PLUGIN_PATH(FileName));
+		CTxdStore::LoadTxd(Slot, PLUGIN_PATH(s.SetFileWithPrefix("classichud\\weapons\\", "weapons.txd")));
 		CTxdStore::AddRef(Slot);
 		CTxdStore::PopCurrentTxd();
 		CTxdStore::SetCurrentTxd(Slot);
@@ -140,6 +138,8 @@ void CHudNew::ReInitialise() {
 		CHudNew::Initialise();
 		CFontNew::Shutdown();
 		CFontNew::Initialise();
+		CRadarNew::Shutdown();
+		CRadarNew::Initialise();
 		ms_bReload = true;
 	}
 }
@@ -163,6 +163,7 @@ void CHudNew::Draw() {
 				DrawMoneyCounter(s.m_fMoney.left, s.m_fMoney.top, s.m_fMoney.right, s.m_fMoney.bottom);
 				DrawHealth(0, s.m_fHealth.left, s.m_fHealth.top, s.m_fHealth.right, s.m_fHealth.bottom);
 				DrawArmour(0, s.m_fArmour.left, s.m_fArmour.top, s.m_fArmour.right, s.m_fArmour.bottom);
+				DrawBreath(0, s.m_fBreath.left, s.m_fBreath.top, s.m_fBreath.right, s.m_fBreath.bottom);
 				DrawWeaponIcon(0, s.m_fWeapon.left, s.m_fWeapon.top, s.m_fWeapon.right, s.m_fWeapon.bottom);
 				DrawAmmo(0, s.m_fAmmo.left, s.m_fAmmo.top, s.m_fAmmo.right, s.m_fAmmo.bottom);
 				DrawWanted(s.m_fWanted.left, s.m_fWanted.top, s.m_fWanted.right, s.m_fWanted.bottom);
@@ -194,7 +195,7 @@ void CHudNew::DrawClock(float x, float y, float w, float h) {
 		CFont::SetEdge(0);
 		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(194, 165, 120, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_CLOCK));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 	}
@@ -207,12 +208,22 @@ void CHudNew::DrawClock(float x, float y, float w, float h) {
 		CFont::SetEdge(0);
 		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(97, 194, 247, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_CLOCK));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 	}
 	else if (GetGameMode() == GAMEMODE_SA) {
-
+		CFont::SetProportional(false);
+		CFont::SetBackground(false, false);
+		CFont::SetOrientation(ALIGN_RIGHT);
+		CFont::SetRightJustifyWrap(0.0f);
+		CFont::SetFontStyle(SA_FONT_PRICEDOWN);
+		CFont::SetDropShadowPosition(0);
+		CFont::SetEdge(2);
+		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_CLOCK));
+		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 	}
 	else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -238,7 +249,7 @@ void CHudNew::DrawMoneyCounter(float x, float y, float w, float h) {
 		CFont::SetEdge(0);
 		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(89, 115, 150, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_CASH));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 	}
@@ -251,12 +262,27 @@ void CHudNew::DrawMoneyCounter(float x, float y, float w, float h) {
 		CFont::SetEdge(0);
 		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(0, 207, 133, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_CASH));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 	}
 	else if (GetGameMode() == GAMEMODE_SA) {
+		CFont::SetProportional(false);
+		CFont::SetBackground(false, false);
+		CFont::SetOrientation(ALIGN_RIGHT);
+		CFont::SetRightJustifyWrap(0.0f);
+		CFont::SetFontStyle(SA_FONT_PRICEDOWN);
+		CFont::SetDropShadowPosition(0);
+		CFont::SetEdge(2);
+		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_CASH));
+		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
+		float fOffset = 0.0f;
+		if (static_cast<float>(CWorld::Players[CWorld::PlayerInFocus].m_nMaxHealth) > 101.0f)
+			fOffset = 12.0f;
+
+		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y + fOffset), TextToPrint);
 	}
 	else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -272,63 +298,84 @@ void CHudNew::DrawMoneyCounter(float x, float y, float w, float h) {
 void CHudNew::DrawHealth(int PlayerID, float x, float y, float w, float h) {
 	char TextToPrint[16];
 	char IconToPrint[16];
+	float fProgress = CWorld::Players[PlayerID].m_pPed->m_fHealth / static_cast<float>(CWorld::Players[PlayerID].m_nMaxHealth);
+	int nProgress = static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_fHealth);
 
-	if (GetGameMode() == GAMEMODE_III) {
-		strcpy_s(IconToPrint, "{");
-		sprintf_s(TextToPrint, "%03d", static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_fHealth));
+	if (CHud::m_ItemToFlash != 4 || CTimer::m_FrameCounter & 8) {
+		if (GetGameMode() == GAMEMODE_III) {
+			strcpy_s(IconToPrint, "{");
+			sprintf_s(TextToPrint, "%03d", nProgress);
 
-		CFont::SetProportional(false);
-		CFont::SetBackground(false, false);
-		CFont::SetOrientation(ALIGN_RIGHT);
-		CFont::SetRightJustifyWrap(0.0f);
-		CFont::SetFontStyle(III_FONT_PRICEDOWN);
-		CFont::SetEdge(0);
-		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
-		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(186, 101, 50, 255));
-		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
-		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-		CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
-	}
-	else if (GetGameMode() == GAMEMODE_VC) {
-		strcpy_s(IconToPrint, "{");
-		sprintf_s(TextToPrint, "%03d", static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_fHealth));
+			CFont::SetProportional(false);
+			CFont::SetBackground(false, false);
+			CFont::SetOrientation(ALIGN_RIGHT);
+			CFont::SetRightJustifyWrap(0.0f);
+			CFont::SetFontStyle(III_FONT_PRICEDOWN);
+			CFont::SetEdge(0);
+			CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
+			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_HEALTH));
+			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 
-		CFont::SetProportional(false);
-		CFont::SetBackground(false, false);
-		CFont::SetOrientation(ALIGN_RIGHT);
-		CFont::SetRightJustifyWrap(0.0f);
-		CFont::SetFontStyle(VC_FONT_PRICEDOWN);
-		CFont::SetEdge(0);
-		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
-		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(255, 150, 225, 255));
-		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
-		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-		CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
-	}
-	else if (GetGameMode() == GAMEMODE_SA) {
+			if (CWorld::Players[PlayerID].m_nLastTimeArmourLost == CWorld::Players[PlayerID].m_nLastTimeEnergyLost || CTimer::m_snTimeInMilliseconds > CWorld::Players[PlayerID].m_nLastTimeEnergyLost + 1500 || CTimer::m_FrameCounter & 8)
+				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+		}
+		else if (GetGameMode() == GAMEMODE_VC) {
+			strcpy_s(IconToPrint, "{");
+			sprintf_s(TextToPrint, "%03d", nProgress);
 
-	}
-	else if (GetGameMode() == GAMEMODE_LCS) {
+			CFont::SetProportional(false);
+			CFont::SetBackground(false, false);
+			CFont::SetOrientation(ALIGN_RIGHT);
+			CFont::SetRightJustifyWrap(0.0f);
+			CFont::SetFontStyle(VC_FONT_PRICEDOWN);
+			CFont::SetEdge(0);
+			CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
+			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_HEALTH));
+			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
+			
+			if (CWorld::Players[PlayerID].m_nLastTimeArmourLost == CWorld::Players[PlayerID].m_nLastTimeEnergyLost || CTimer::m_snTimeInMilliseconds > CWorld::Players[PlayerID].m_nLastTimeEnergyLost + 1500 || CTimer::m_FrameCounter & 8)
+				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+		}
+		else if (GetGameMode() == GAMEMODE_SA) {
+			float fOffset = 0.0f;
 
-	}
-	else if (GetGameMode() == GAMEMODE_VCS) {
+			if (static_cast<float>(CWorld::Players[PlayerID].m_nMaxHealth) > 101.0f)
+				fOffset = 12.0f;
 
-	}
-	else if (GetGameMode() == GAMEMODE_ADVANCE) {
+			float fBarSize = static_cast<float>(CWorld::Players[PlayerID].m_nMaxHealth) / CStats::GetFatAndMuscleModifier(STAT_MOD_10);
 
+			if (fBarSize > 1.0f)
+				fBarSize = 1.0f;
+
+			if (CWorld::Players[PlayerID].m_pPed->m_fHealth >= 10 || CTimer::m_FrameCounter & 8)
+				DrawProgressBar(SCREEN_RIGHT(x + (w * fBarSize)), SCREEN_TOP(y + fOffset), SCREEN_LEFT(w * fBarSize), SCREEN_TOP(h), fProgress, SCREEN_TOP(2.5f), 0, CRGBA(s.HUD_COLOR_HEALTH), CRGBA(s.HUD_COLOR_HEALTH.r, s.HUD_COLOR_HEALTH.g, s.HUD_COLOR_HEALTH.b, 150));
+		}
+		else if (GetGameMode() == GAMEMODE_LCS) {
+
+		}
+		else if (GetGameMode() == GAMEMODE_VCS) {
+
+		}
+		else if (GetGameMode() == GAMEMODE_ADVANCE) {
+
+		}
 	}
 }
 
 void CHudNew::DrawArmour(int PlayerID, float x, float y, float w, float h) {
 	char TextToPrint[16];
 	char IconToPrint[16];
+	float fProgress = CWorld::Players[PlayerID].m_pPed->m_fArmour / static_cast<float>(CWorld::Players[PlayerID].m_nMaxArmour);
+	int nProgress = static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_fArmour);
 
-	if (GetGameMode() == GAMEMODE_III) {
-		if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_fArmour > 1.0f) {
+	if ((CHud::m_ItemToFlash != 3 || CTimer::m_FrameCounter & 8) && CWorld::Players[PlayerID].m_pPed->m_fArmour > 1.0) {
+		if (GetGameMode() == GAMEMODE_III) {
 			strcpy_s(IconToPrint, "[");
-			sprintf_s(TextToPrint, "%03d", static_cast<int>(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_fArmour));
+			sprintf_s(TextToPrint, "%03d", nProgress);
 
 			CFont::SetProportional(false);
 			CFont::SetBackground(false, false);
@@ -338,108 +385,126 @@ void CHudNew::DrawArmour(int PlayerID, float x, float y, float w, float h) {
 			CFont::SetEdge(0);
 			CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(CRGBA(124, 140, 95, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_ARMOUR));
 			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-			CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+
+			if (CWorld::Players[PlayerID].m_nLastTimeArmourLost == 0 || CTimer::m_snTimeInMilliseconds > CWorld::Players[PlayerID].m_nLastTimeArmourLost + 1500 || CTimer::m_FrameCounter & 8)
+				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
 		}
-	}
-	else if (GetGameMode() == GAMEMODE_VC) {
-		strcpy_s(IconToPrint, "<");
-		sprintf_s(TextToPrint, "%03d", static_cast<int>(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_fArmour));
+		else if (GetGameMode() == GAMEMODE_VC) {
+			strcpy_s(IconToPrint, "<");
+			sprintf_s(TextToPrint, "%03d", nProgress);
 
-		CFont::SetProportional(false);
-		CFont::SetBackground(false, false);
-		CFont::SetOrientation(ALIGN_RIGHT);
-		CFont::SetRightJustifyWrap(0.0f);
-		CFont::SetFontStyle(VC_FONT_PRICEDOWN);
-		CFont::SetEdge(0);
-		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
-		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(185, 185, 185, 255));
-		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
-		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-		CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
-	}
-	else if (GetGameMode() == GAMEMODE_SA) {
+			CFont::SetProportional(false);
+			CFont::SetBackground(false, false);
+			CFont::SetOrientation(ALIGN_RIGHT);
+			CFont::SetRightJustifyWrap(0.0f);
+			CFont::SetFontStyle(VC_FONT_PRICEDOWN);
+			CFont::SetEdge(0);
+			CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
+			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_ARMOUR));
+			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 
-	}
-	else if (GetGameMode() == GAMEMODE_LCS) {
+			if (CWorld::Players[PlayerID].m_nLastTimeArmourLost == 0 || CTimer::m_snTimeInMilliseconds > CWorld::Players[PlayerID].m_nLastTimeArmourLost + 1500 || CTimer::m_FrameCounter & 8)
+				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+		}
+		else if (GetGameMode() == GAMEMODE_SA) {
+			DrawProgressBar(SCREEN_RIGHT(x + w), SCREEN_TOP(y), SCREEN_LEFT(w), SCREEN_TOP(h), fProgress, SCREEN_TOP(2.5f), 0, CRGBA(s.HUD_COLOR_ARMOUR), CRGBA(s.HUD_COLOR_ARMOUR.r, s.HUD_COLOR_ARMOUR.g, s.HUD_COLOR_ARMOUR.b, 150));
+		}
+		else if (GetGameMode() == GAMEMODE_LCS) {
 
-	}
-	else if (GetGameMode() == GAMEMODE_VCS) {
+		}
+		else if (GetGameMode() == GAMEMODE_VCS) {
 
-	}
-	else if (GetGameMode() == GAMEMODE_ADVANCE) {
+		}
+		else if (GetGameMode() == GAMEMODE_ADVANCE) {
 
+		}
 	}
 }
 
 void CHudNew::DrawBreath(int PlayerID, float x, float y, float w, float h) {
 	char TextToPrint[16];
 	char IconToPrint[16];
+	float fProgress = CWorld::Players[PlayerID].m_pPed->m_pPlayerData->m_fBreath / CStats::GetFatAndMuscleModifier(STAT_MOD_AIR_IN_LUNG);
+	int nProgress = static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_pPlayerData->m_fBreath * 100.0f / CStats::GetFatAndMuscleModifier(STAT_MOD_AIR_IN_LUNG));
 
-	if (GetGameMode() == GAMEMODE_III) {
-		if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_pPlayerData->m_fBreath > 1.0f) {
-			strcpy_s(IconToPrint, "b");
-			sprintf_s(TextToPrint, "%03d", static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_pPlayerData->m_fBreath));
+	if (CWorld::Players[PlayerID].m_pPed->m_nPhysicalFlags.bSubmergedInWater) {
+		if (CHud::m_ItemToFlash != 10 || CTimer::m_FrameCounter & 8) {
+			if (GetGameMode() == GAMEMODE_III) {
+				strcpy_s(IconToPrint, "b");
+				sprintf_s(TextToPrint, "%03d", nProgress);
 
-			CFont::SetProportional(false);
-			CFont::SetBackground(false, false);
-			CFont::SetOrientation(ALIGN_RIGHT);
-			CFont::SetRightJustifyWrap(0.0f);
-			CFont::SetFontStyle(III_FONT_PRICEDOWN);
-			CFont::SetEdge(0);
-			CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
-			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(CRGBA(220, 235, 255, 255));
-			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
-			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-			CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+				CFont::SetProportional(false);
+				CFont::SetBackground(false, false);
+				CFont::SetOrientation(ALIGN_RIGHT);
+				CFont::SetRightJustifyWrap(0.0f);
+				CFont::SetFontStyle(III_FONT_PRICEDOWN);
+				CFont::SetEdge(0);
+				CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
+				CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+				CFont::SetColor(CRGBA(s.HUD_COLOR_BREATH));
+				CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+				CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
+				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+			}
+			else if (GetGameMode() == GAMEMODE_VC) {
+				strcpy_s(IconToPrint, "b");
+				sprintf_s(TextToPrint, "%03d", nProgress);
+
+				CFont::SetProportional(false);
+				CFont::SetBackground(false, false);
+				CFont::SetOrientation(ALIGN_RIGHT);
+				CFont::SetRightJustifyWrap(0.0f);
+				CFont::SetFontStyle(III_FONT_PRICEDOWN);
+				CFont::SetEdge(0);
+				CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
+				CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+				CFont::SetColor(CRGBA(s.HUD_COLOR_BREATH));
+				CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+				CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
+				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+			}
+			else if (GetGameMode() == GAMEMODE_SA) {
+				DrawProgressBar(SCREEN_RIGHT(x + w), SCREEN_TOP(y), SCREEN_LEFT(w), SCREEN_TOP(h), fProgress, SCREEN_TOP(2.5f), 0, CRGBA(s.HUD_COLOR_BREATH), CRGBA(s.HUD_COLOR_BREATH.r, s.HUD_COLOR_BREATH.g, s.HUD_COLOR_BREATH.b, 150));
+			}
+			else if (GetGameMode() == GAMEMODE_LCS) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_VCS) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_ADVANCE) {
+
+			}
 		}
-	}
-	else if (GetGameMode() == GAMEMODE_VC) {
-		strcpy_s(IconToPrint, "b");
-		sprintf_s(TextToPrint, "%03d", static_cast<int>(CWorld::Players[PlayerID].m_pPed->m_pPlayerData->m_fBreath));
-
-		CFont::SetProportional(false);
-		CFont::SetBackground(false, false);
-		CFont::SetOrientation(ALIGN_RIGHT);
-		CFont::SetRightJustifyWrap(0.0f);
-		CFont::SetFontStyle(III_FONT_PRICEDOWN);
-		CFont::SetEdge(0);
-		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
-		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(220, 235, 255, 255));
-		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
-		CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-		CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
-	}
-	else if (GetGameMode() == GAMEMODE_SA) {
-
-	}
-	else if (GetGameMode() == GAMEMODE_LCS) {
-
-	}
-	else if (GetGameMode() == GAMEMODE_VCS) {
-
-	}
-	else if (GetGameMode() == GAMEMODE_ADVANCE) {
-
 	}
 }
 
 void CHudNew::DrawWeaponIcon(int PlayerID, float x, float y, float w, float h) {
 	RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERLINEAR);
-	int ModelId = CWeaponInfo::GetWeaponInfo(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1;
-	int SpriteId = ModelId - 320;
+	int ModelId = CWeaponInfo::GetWeaponInfo(CWorld::Players[PlayerID].m_pPed->m_aWeapons[CWorld::Players[PlayerID].m_pPed->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1;
+	int Slot = CTxdStore::FindTxdSlot("weapons");
+	CBaseModelInfo *index = CModelInfo::GetModelInfo(ModelId);
+	RwTexDictionary *txd = CTxdStore::ms_pTxdPool->GetAt(Slot)->m_pRwDictionary;
+	CRGBA color = CRGBA(s.HUD_COLOR_WEAPON_ICON);
 
-	if (SpriteId <= 0)
-		SpriteId = 0;
-	else if (SpriteId >= HUD_TOTALWEAPONS - 1)
-		SpriteId = HUD_TOTALWEAPONS - 1;
-
-	SpritesMod[SpriteId].Draw(CRect(SCREEN_RIGHT(x), SCREEN_TOP(y), SCREEN_RIGHT(w), SCREEN_TOP(h)), CRGBA(255, 255, 255, 255));
+	if (ModelId <= MODEL_NULL) 
+		SpritesMod[HUD_UNARMED].Draw(CRect(SCREEN_RIGHT(x), SCREEN_TOP(y), SCREEN_RIGHT(w), SCREEN_TOP(h)), CRGBA(color));
+	else {
+		if (txd) {
+			RwTexture *pTexture = RwTexDictionaryFindHashNamedTexture(txd, index->m_nKey);
+			if (pTexture) {
+				CSprite2d::SetVertices(CRect(SCREEN_RIGHT(x), SCREEN_TOP(y), SCREEN_RIGHT(w), SCREEN_TOP(h)), color, color, color, color);
+				RwRenderStateSet(rwRENDERSTATETEXTURERASTER, pTexture->raster);
+				RwIm2DRenderPrimitive(rwPRIMTYPETRIFAN, CSprite2d::maVertices, 4);
+				RwRenderStateSet(rwRENDERSTATETEXTURERASTER, nullptr);
+			}
+		}
+	}
 }
 
 void CHudNew::DrawAmmo(int PlayerID, float x, float y, float w, float h) {
@@ -475,9 +540,10 @@ void CHudNew::DrawAmmo(int PlayerID, float x, float y, float w, float h) {
 		sprintf(TextToPrint, "%d-%d", Ammo, Clip);
 	}
 
+	if ((TotalAmmo - AmmoInClip) != 9999 && (TotalAmmo - AmmoInClip) < 9999)
 	if (!CDarkel::FrenzyOnGoing() && WeaponType &&
 		WeaponType != WEAPON_DETONATOR &&
-		(WeaponType < WEAPON_DILDO1 || WeaponType >= WEAPON_GRENADE) &&
+		(WeaponType <= WEAPON_DILDO1 || WeaponType > WEAPON_GRENADE) &&
 		WeaponType != WEAPON_PARACHUTE &&
 		CWeaponInfo::GetWeaponInfo(WeaponType, 1)->m_nWeaponFire != WEAPON_FIRE_USE &&
 		CWeaponInfo::GetWeaponInfo(WeaponType, 1)->m_nSlot > 1) {
@@ -485,12 +551,12 @@ void CHudNew::DrawAmmo(int PlayerID, float x, float y, float w, float h) {
 			CFont::SetProportional(true);
 			CFont::SetBackground(false, false);
 			CFont::SetOrientation(ALIGN_CENTER);
-			CFont::SetCentreSize(640.0f);
+			CFont::SetCentreSize(SCREEN_LEFT(640.0f));
 			CFont::SetFontStyle(III_FONT_SUBTITLES);
 			CFont::SetEdge(0);
 			CFont::SetDropShadowPosition(0);
 			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(CRGBA(0, 0, 0, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_AMMO));
 			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 		}
@@ -498,17 +564,27 @@ void CHudNew::DrawAmmo(int PlayerID, float x, float y, float w, float h) {
 			CFont::SetProportional(true);
 			CFont::SetBackground(false, false);
 			CFont::SetOrientation(ALIGN_CENTER);
-			CFont::SetCentreSize(640.0f);
+			CFont::SetCentreSize(SCREEN_LEFT(640.0f));
 			CFont::SetFontStyle(VC_FONT_SUBTITLES);
 			CFont::SetEdge(0);
 			CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(CRGBA(255, 150, 225, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_AMMO));
 			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 		}
 		else if (GetGameMode() == GAMEMODE_SA) {
-
+			CFont::SetProportional(true);
+			CFont::SetBackground(false, false);
+			CFont::SetOrientation(ALIGN_CENTER);
+			CFont::SetCentreSize(SCREEN_LEFT(640.0f));
+			CFont::SetFontStyle(SA_FONT_SUBTITLES);
+			CFont::SetDropShadowPosition(0);
+			CFont::SetEdge(1);
+			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+			CFont::SetColor(CRGBA(s.HUD_COLOR_AMMO));
+			CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+			CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
 		}
 		else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -535,20 +611,20 @@ void CHudNew::DrawWanted(float x, float y, float w, float h) {
 		CFont::SetEdge(0);
 		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(0, 0, 0, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
 		for (int i = 0; i < 6; i++) {
 			if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nWantedLevel > i
 				&& (CTimer::m_snTimeInMilliseconds > CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nLastTimeWantedLevelChanged
 					+ 2000 || CTimer::m_FrameCounter & 8))
-				CFont::SetColor(CRGBA(193, 164, 120, 255));
+				CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_A));
 			else {
-				CFont::SetColor(CRGBA(0, 0, 0, 255));
+				CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
 				CFont::SetDropShadowPosition(0);
 			}
 
-			CFont::PrintString(SCREEN_RIGHT(x + 24.0f * i), SCREEN_TOP(y), IconToPrint);
+			CFont::PrintString(SCREEN_RIGHT(x + 23.0f * i), SCREEN_TOP(y), IconToPrint);
 		}
 	}
 	else if (GetGameMode() == GAMEMODE_VC) {
@@ -561,22 +637,50 @@ void CHudNew::DrawWanted(float x, float y, float w, float h) {
 		CFont::SetEdge(0);
 		CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(CRGBA(0, 0, 0, 255));
+		CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
 		for (int i = 0; i < 6; i++) {
 			if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nWantedLevel > i
 				&& (CTimer::m_snTimeInMilliseconds > CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nLastTimeWantedLevelChanged
 					+ 2000 || CTimer::m_FrameCounter & 8)) 
-				CFont::SetColor(CRGBA(97, 194, 247, 255));
-			else 
-				CFont::SetColor(CRGBA(27, 89, 130, 255));
+				CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_A));
+			else
+				CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
 
-			CFont::PrintString(SCREEN_RIGHT(x + 24.0f * i), SCREEN_TOP(y), IconToPrint);
+			CFont::PrintString(SCREEN_RIGHT(x + 23.0f * i), SCREEN_TOP(y), IconToPrint);
 		}
 	}
 	else if (GetGameMode() == GAMEMODE_SA) {
+		strcpy_s(IconToPrint, "]");
+		CFont::SetProportional(true);
+		CFont::SetBackground(false, false);
+		CFont::SetOrientation(ALIGN_RIGHT);
+		CFont::SetRightJustifyWrap(0.0f);
+		CFont::SetFontStyle(SA_FONT_GOTHIC);
+		CFont::SetEdge(0);
+		CFont::SetDropShadowPosition(0);
+		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
+		float fOffset = 0.0f;
+		if (static_cast<float>(CWorld::Players[CWorld::PlayerInFocus].m_nMaxHealth) > 101.0f)
+			fOffset = 12.0f;
+
+		for (int i = 0; i < 6; i++) {
+			if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nWantedLevel > i
+				&& (CTimer::m_snTimeInMilliseconds > CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nLastTimeWantedLevelChanged
+					+ 2000 || CTimer::m_FrameCounter & 8)) {
+				CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_A));
+				CFont::SetEdge(1);
+			}
+			else {
+				CFont::SetEdge(0);
+				CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
+			}
+
+			CFont::PrintString(SCREEN_RIGHT(x + 18.0f * i), SCREEN_TOP(y + fOffset), IconToPrint);
+		}
 	}
 	else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -697,7 +801,7 @@ void CHudNew::DrawAreaName(float x, float y, float w, float h) {
 					CFont::SetEdge(0);
 					CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 					CFont::SetDropColor(CRGBA(0, 0, 0, fZoneAlpha));
-					CFont::SetColor(CRGBA(152, 154, 82, fZoneAlpha));
+					CFont::SetColor(CRGBA(s.HUD_COLOR_ZONE_NAME.r, s.HUD_COLOR_ZONE_NAME.g, s.HUD_COLOR_ZONE_NAME.b, fZoneAlpha));
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 					CFont::PrintString(SCREEN_RIGHT(x), SCREEN_BOTTOM(y), CHud::m_ZoneToPrint);
 				}
@@ -712,13 +816,26 @@ void CHudNew::DrawAreaName(float x, float y, float w, float h) {
 					CFont::SetEdge(0);
 					CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 					CFont::SetDropColor(CRGBA(0, 0, 0, fZoneAlpha));
-					CFont::SetColor(CRGBA(45, 155, 90, fZoneAlpha));
+					CFont::SetColor(CRGBA(s.HUD_COLOR_ZONE_NAME.r, s.HUD_COLOR_ZONE_NAME.g, s.HUD_COLOR_ZONE_NAME.b, fZoneAlpha));
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 					CFont::PrintStringFromBottom(SCREEN_RIGHT(x), SCREEN_BOTTOM(y), CHud::m_ZoneToPrint);
 					CFont::SetSlant(0.0f);
 				}
 				else if (GetGameMode() == GAMEMODE_SA) {
-
+					CFont::SetProportional(true);
+					CFont::SetBackground(false, false);
+					CFont::SetOrientation(ALIGN_RIGHT);
+					CFont::SetRightJustifyWrap(0.0f);
+					CFont::SetSlantRefPoint(SCREEN_RIGHT(x), SCREEN_BOTTOM(y));
+					CFont::SetSlant(0.0f);
+					CFont::SetFontStyle(SA_FONT_GOTHIC);
+					CFont::SetDropShadowPosition(0);
+					CFont::SetEdge(2);
+					CFont::SetDropColor(CRGBA(0, 0, 0, fZoneAlpha));
+					CFont::SetColor(CRGBA(s.HUD_COLOR_ZONE_NAME.r, s.HUD_COLOR_ZONE_NAME.g, s.HUD_COLOR_ZONE_NAME.b, fZoneAlpha));
+					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+					CFont::PrintStringFromBottom(SCREEN_RIGHT(x), SCREEN_BOTTOM(y), CHud::m_ZoneToPrint);
+					CFont::SetSlant(0.0f);
 				}
 				else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -828,7 +945,7 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 					CFont::SetEdge(0);
 					CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 					CFont::SetDropColor(CRGBA(0, 0, 0, fVehicleAlpha));
-					CFont::SetColor(CRGBA(194, 165, 120, fVehicleAlpha));
+					CFont::SetColor(CRGBA(s.HUD_COLOR_VEHICLE_NAME.r, s.HUD_COLOR_VEHICLE_NAME.g, s.HUD_COLOR_VEHICLE_NAME.b, fVehicleAlpha));
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 					CFont::PrintString(SCREEN_RIGHT(x), SCREEN_BOTTOM(y), CHud::m_pVehicleNameToPrint);
 				}
@@ -843,13 +960,26 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 					CFont::SetEdge(0);
 					CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 					CFont::SetDropColor(CRGBA(0, 0, 0, fVehicleAlpha));
-					CFont::SetColor(CRGBA(97, 194, 247, fVehicleAlpha));
+					CFont::SetColor(CRGBA(s.HUD_COLOR_VEHICLE_NAME.r, s.HUD_COLOR_VEHICLE_NAME.g, s.HUD_COLOR_VEHICLE_NAME.b, fVehicleAlpha));
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 					CFont::PrintStringFromBottom(SCREEN_RIGHT(x), SCREEN_BOTTOM(y), CHud::m_pVehicleNameToPrint);
 					CFont::SetSlant(0.0f);
 				}
 				else if (GetGameMode() == GAMEMODE_SA) {
-
+					CFont::SetProportional(true);
+					CFont::SetBackground(false, false);
+					CFont::SetOrientation(ALIGN_RIGHT);
+					CFont::SetRightJustifyWrap(0.0f);
+					CFont::SetSlantRefPoint(SCREEN_RIGHT(x), SCREEN_BOTTOM(y));
+					CFont::SetSlant(0.0f);
+					CFont::SetFontStyle(SA_FONT_MENU);
+					CFont::SetDropShadowPosition(0);
+					CFont::SetEdge(2);
+					CFont::SetDropColor(CRGBA(0, 0, 0, fVehicleAlpha));
+					CFont::SetColor(CRGBA(s.HUD_COLOR_VEHICLE_NAME.r, s.HUD_COLOR_VEHICLE_NAME.g, s.HUD_COLOR_VEHICLE_NAME.b, fVehicleAlpha));
+					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
+					CFont::PrintStringFromBottom(SCREEN_RIGHT(x), SCREEN_BOTTOM(y), CHud::m_pVehicleNameToPrint);
+					CFont::SetSlant(0.0f);
 				}
 				else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -902,7 +1032,7 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 					CFont::SetProportional(true);
 					CFont::SetBackground(false, false);
 					CFont::SetOrientation(ALIGN_CENTER);
-					CFont::SetCentreSize(640.0f);
+					CFont::SetCentreSize(SCREEN_LEFT(640.0f));
 					CFont::SetFontStyle(III_FONT_PRICEDOWN);
 					CFont::SetEdge(0);
 					CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
@@ -910,9 +1040,9 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
 					if (AERadioTrackManager.m_nStationsListed || AERadioTrackManager.m_nStationsListDown)
-						CFont::SetColor(CRGBA(102, 133, 143, 255));
+						CFont::SetColor(CRGBA(s.HUD_COLOR_RADIO_NAME_N));
 					else
-						CFont::SetColor(CRGBA(147, 196, 211, 255));
+						CFont::SetColor(CRGBA(s.HUD_COLOR_RADIO_NAME_A));
 
 					CFont::PrintString((SCREEN_WIDTH / 2) + SCREEN_LEFT(x), SCREEN_TOP(y), pRadioName);
 				}
@@ -920,7 +1050,7 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 					CFont::SetProportional(true);
 					CFont::SetBackground(false, false);
 					CFont::SetOrientation(ALIGN_CENTER);
-					CFont::SetCentreSize(640.0f);
+					CFont::SetCentreSize(SCREEN_LEFT(640.0f));
 					CFont::SetFontStyle(VC_FONT_SUBTITLES);
 					CFont::SetEdge(0);
 					CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
@@ -928,14 +1058,29 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
 					if (AERadioTrackManager.m_nStationsListed || AERadioTrackManager.m_nStationsListDown)
-						CFont::SetColor(CRGBA(102, 133, 143, 255));
+						CFont::SetColor(CRGBA(s.HUD_COLOR_RADIO_NAME_N));
 					else
-						CFont::SetColor(CRGBA(147, 196, 211, 255));
+						CFont::SetColor(CRGBA(s.HUD_COLOR_RADIO_NAME_A));
 
 					CFont::PrintString((SCREEN_WIDTH / 2) + SCREEN_LEFT(x), SCREEN_TOP(y), pRadioName);
 				}
 				else if (GetGameMode() == GAMEMODE_SA) {
+					CFont::SetProportional(true);
+					CFont::SetBackground(false, false);
+					CFont::SetOrientation(ALIGN_CENTER);
+					CFont::SetCentreSize(SCREEN_LEFT(640.0f));
+					CFont::SetFontStyle(SA_FONT_MENU);
+					CFont::SetDropShadowPosition(0);
+					CFont::SetEdge(1);
+					CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
+					if (AERadioTrackManager.m_nStationsListed || AERadioTrackManager.m_nStationsListDown)
+						CFont::SetColor(CRGBA(s.HUD_COLOR_RADIO_NAME_N));
+					else
+						CFont::SetColor(CRGBA(s.HUD_COLOR_RADIO_NAME_A));
+
+					CFont::PrintString((SCREEN_WIDTH / 2) + SCREEN_LEFT(x), SCREEN_TOP(y), pRadioName);
 				}
 				else if (GetGameMode() == GAMEMODE_LCS) {
 
@@ -958,16 +1103,16 @@ void CHudNew::DrawProgressBar(float x, float y, float width, float height, float
 		CSprite2d::DrawRect(CRect((x + shadow), (y + shadow), (x + shadow + width), (y + shadow + height)), CRGBA(0, 0, 0, 205));
 	// Border
 	if (border)
-		CSprite2d::DrawRect(CRect((x - border), (y - border), (x + border + width + border), (y + border + height)), CRGBA(0, 0, 0, 255));
+		CSprite2d::DrawRect(CRect((x - border), (y - border), (x + border + width), (y + border + height)), CRGBA(0, 0, 0, 255));
 
-	if (progress >= 100.0f)
-		progress = 100.0f;
+	if (progress >= 1.0f)
+		progress = 1.0f;
 	else {
 		// Back
 		CSprite2d::DrawRect(CRect((x), (y), (x + width), (y + height)), CRGBA(colorBack));
 	}
 	if (progress > 0.0f) {
-		CSprite2d::DrawRect(CRect((x), (y), (x + width * (progress / 100.0f)), (y + height)), CRGBA(colorFront));
+		CSprite2d::DrawRect(CRect((x), (y), (x + width * (progress)), (y + height)), CRGBA(colorFront));
 	}
 }
 

@@ -1,0 +1,22 @@
+#
+# ClassicHud
+# This file contains RGB colour values for each HUD component.
+# Please ensure you change the correct values, wrong values will make the modification working improperly.
+#
+
+# -------------------------------------------------
+# -HUD COLOUR NAME-		     -R- -G- -B- -A-
+# -------------------------------------------------
+HUD_COLOR_CLOCK               97 194 247 255
+HUD_COLOR_CASH                 0 207 133 255
+HUD_COLOR_HEALTH             255 150 225 255
+HUD_COLOR_ARMOUR             185 185 185 255
+HUD_COLOR_BREATH             172 203 241 255
+HUD_COLOR_WEAPON_ICON        255 255 255 255
+HUD_COLOR_AMMO               255 150 225 255
+HUD_COLOR_WANTED_N            27  89 130 255
+HUD_COLOR_WANTED_A            97 194 247 255
+HUD_COLOR_ZONE_NAME           45 155  90 255
+HUD_COLOR_VEHICLE_NAME        97 194 247 255
+HUD_COLOR_RADIO_NAME_N       102 133 143 255
+HUD_COLOR_RADIO_NAME_A       147 196 211 255
