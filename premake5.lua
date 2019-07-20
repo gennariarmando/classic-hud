@@ -24,7 +24,7 @@ workspace "ClassicHud"
 	staticruntime "On"
 	defines { "_CRT_SECURE_NO_WARNINGS", "_CRT_NON_CONFORMING_SWPRINTFS" }
     buildoptions { "/sdl-" }
-    disablewarnings { "4073", "4221" }
+    disablewarnings { "4073", "4221", "4244" }
 
 	files { 
 	"include/screen_addition/*.*",

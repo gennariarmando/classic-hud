@@ -1,6 +1,7 @@
 #include "plugin.h"
 #include "CHud.h"
 #include "CRadar.h"
+#include "CMenuManager.h"
 #include "CTxdStore.h"
 #include "CHudNew.h"
 #include "CRadarNew.h"
@@ -9,90 +10,43 @@
 
 using namespace plugin;
 
+CSprite2d CRadarNew::RadarSprites[RADAR_TOTALSPRITES];
+CSprite2d CRadarNew::BlipsSprites[64];
 bool CRadarNew::ms_bSpritesLoaded;
 
-char *hudTextureNames2[] = {
-	"fist",
-	"fistm",
-	"sitem16",
-	"sitem16m",
-	"siterocket",
-	"siterocketm",
+char *radarSpriteList[] = {
 	"radardisc",
-	"radardisca",
-	"radarRingPlane",
-	"radarRingPlaneA",
-	"SkipIcon",
-	"SkipIconA"
-};
-
-char *radarIconList[] = {
-	"radar_centre",
-	"arrow",
-	"radar_north",
-	"radar_airYard",
-	"radar_ammugun",
-	"radar_barbers",
-	"radar_BIGSMOKE",
-	"radar_boatyard",
-	"radar_burgerShot",
-	"radar_bulldozer",
-	"radar_CATALINAPINK",
-	"radar_CESARVIAPANDO",
-	"radar_chicken" ,
-	"radar_CJ",
-	"radar_CRASH1",
-	"radar_diner",
-	"radar_emmetGun",
-	"radar_enemyAttack",
-	"radar_fire",
-	"radar_girlfriend",
-	"radar_hostpitaL",
-	"radar_LocoSyndicate",
-	"radar_MADDOG",
-	"radar_mafiaCasino",
-	"radar_MCSTRAP",
-	"radar_modGarage",
-	"radar_OGLOC",
-	"radar_pizza",
-	"radar_police",
-	"radar_propertyG",
-	"radar_propertyR",
-	"radar_race",
-	"radar_RYDER",
-	"radar_saveGame",
-	"radar_school",
-	"radar_qmark",
-	"radar_SWEET",
-	"radar_tattoo",
-	"radar_THETRUTH",
-	"radar_waypoint",
-	"radar_TorenoRanch"	,
-	"radar_triads",
-	"radar_triadsCasino",
-	"radar_tshirt",
-	"radar_WOOZIE",
-	"radar_ZERO",
-	"radar_dateDisco",
-	"radar_dateDrink",
-	"radar_dateFood",
-	"radar_truck",
-	"radar_cash",
-	"radar_flag",
-	"radar_gym",
-	"radar_impound",
-	"radar_light",
-	"radar_runway",
-	"radar_gangB",
-	"radar_gangP",
-	"radar_gangY",
-	"radar_gangN",
-	"radar_gangG",
-	"radar_spray"
+	"radarringfront",
+	"radarringback",
+	"radarringmask"
 };
 
 void CRadarNew::Initialise() {
+	s.readBlipsDat();
+
 	if (!ms_bSpritesLoaded) {
+		int RadarSlot = CTxdStore::AddTxdSlot("radar_new");
+		CTxdStore::LoadTxd(RadarSlot, PLUGIN_PATH(s.SetFileWithPrefix("classichud\\radar\\", "radar.txd")));
+		CTxdStore::AddRef(RadarSlot);
+		CTxdStore::PopCurrentTxd();
+		CTxdStore::SetCurrentTxd(RadarSlot);
+
+		for (int i = 0; i < RADAR_TOTALSPRITES; i++)
+			RadarSprites[i].SetTexture(radarSpriteList[i]);
+
+		CTxdStore::PopCurrentTxd();
+
+		int BlipsSlot = CTxdStore::AddTxdSlot("blips_new");
+		CTxdStore::LoadTxd(BlipsSlot, PLUGIN_PATH(s.SetFileWithPrefix("classichud\\radar\\", "blips.txd")));
+		CTxdStore::AddRef(BlipsSlot);
+		CTxdStore::PopCurrentTxd();
+		CTxdStore::SetCurrentTxd(BlipsSlot);
+
+		for (int i = 0; i < s.m_nBlipsCounter; i++) {
+			BlipsSprites[i].SetTexture(s.m_pBlipNames[i]);
+		}
+
+		CTxdStore::PopCurrentTxd();
 
 		ms_bSpritesLoaded = true;
 	}
@@ -100,6 +54,17 @@ void CRadarNew::Initialise() {
 
 void CRadarNew::Shutdown() {
 	if (ms_bSpritesLoaded) {
+		for (int i = 0; i < RADAR_TOTALSPRITES; i++)
+			RadarSprites[i].Delete();
+
+		int RadarSlot = CTxdStore::FindTxdSlot("radar_new");
+		CTxdStore::RemoveTxdSlot(RadarSlot);
+
+		for (int i = 0; i < s.m_nBlipsCounter; i++)
+			BlipsSprites[i].Delete();
+
+		int BlipsSlot = CTxdStore::FindTxdSlot("blips_new");
+		CTxdStore::RemoveTxdSlot(BlipsSlot);
 
 		ms_bSpritesLoaded = false;
 	}
@@ -126,11 +91,32 @@ void CRadarNew::DrawRadarCircle() {
 	}
 }
 
+void CRadarNew::DrawRadarSprite(unsigned int iconID, float x, float y, unsigned int alpha) {
+	if (FrontEndMenuManager.drawRadarOrMap) {
+		x = SCREEN_WIDTH * (1.0f / 640.0f) * x;
+		y = SCREEN_HEIGHT * (1.0f / 640.0f) * y;
+		CRadar::LimitToMap(&x, &y);
+	}
+
+	if (CRadar::DisplayThisBlip(iconID, -99)) {
+		float w = 8.0f;
+		float h = 8.0f;
+		CRGBA color = CRGBA(255, 255, 255, alpha);
+
+		BlipsSprites[iconID].Draw(CRect(x - SCREEN_LEFT(w), y - SCREEN_TOP(h), x + SCREEN_LEFT(w), y + SCREEN_TOP(h)), color);
+		CRadar::AddBlipToLegendList(0, iconID);
+	}
+}
+
 void CRadarNew::InjectPatches() {
+	//Events::initRwEvent += CRadarNew::Initialise;
+	//Events::shutdownRwEvent += CRadarNew::Shutdown;
+
 #if GTASA
-	//plugin::patch::Nop(0x58A818, 16);
-	//plugin::patch::Nop(0x58A8C2, 16);
-	//plugin::patch::Nop(0x58A96C, 16);
-	//plugin::patch::Nop(0x58AA1A, 16); 
+	//patch::RedirectJump(0x585FF0, CRadarNew::DrawRadarSprite);
+	//patch::Nop(0x58A818, 16);
+	//patch::Nop(0x58A8C2, 16);
+	//patch::Nop(0x58A96C, 16);
+	//patch::Nop(0x58AA1A, 16); 
 #endif
 }

@@ -23,69 +23,19 @@
 #include "CModelInfo.h"
 #include "CRadar.h"
 #include "CStats.h"
+#include "CMessages.h"
+#include "CGarages.h"
 
 using namespace plugin;
 
 eGameMode CHudNew::ms_nGameMode;
-CSprite2d CHudNew::SpritesMod[HUD_TOTALWEAPONS];
+CSprite2d CHudNew::SpritesNew[HUD_TOTALSPRITES];
 bool CHudNew::ms_bSpritesLoaded;
 char *CHudNew::ms_nGamePrefix;
 bool CHudNew::ms_bReload;
 
-char *SpritesModNames[HUD_TOTALWEAPONS] = {
-	"unarmed",
-	"dildo1", // 321
-	"dildo2",
-	"vibe1",
-	"vibe2",
-	"flowers",
-	"cane",
-	"boxwee",
-	"boxbig",
-	BLANK,
-	"cellphone",
-	"brassknuckle",
-	BLANK,
-	"golfclub",
-	"nightstick",
-	"knife",
-	"baseballbat",
-	"shovel",
-	"poolcue",
-	"katana",
-	BLANK,
-	"chainsaw",
-	"grenade",
-	"teargas",
-	"molotov",
-	"missile",
-	"pistol",
-	"pistol_silenced",
-	"desert_eagle",
-	"shotgun",
-	"sawnoff",
-	"spas12",
-	"micro_uzi",
-	"mp5",
-	"flare",
-	"ak47",
-	"m4",
-	"countryrifle",
-	"sniperrifle",
-	"rlauncher",
-	"heatseek",
-	"flamethrower",
-	"minigun",
-	"satchel_charge",
-	"detonator",
-	"spraycan",
-	"extinguisher",
-	"camera",
-	"nightvision",
-	"infrared",
-	"jetpack",
-	"parachute",
-	"tec9",
+char *SpritesModNames[HUD_TOTALSPRITES] = {
+	"unarmed"
 };
 
 void CHudNew::Initialise() {
@@ -108,8 +58,8 @@ void CHudNew::Initialise() {
 		CTxdStore::PopCurrentTxd();
 		CTxdStore::SetCurrentTxd(Slot);
 
-		for (int i = 0; i < HUD_TOTALWEAPONS; i++)
-			SpritesMod[i].SetTexture(SpritesModNames[i]);
+		for (int i = 0; i < HUD_TOTALSPRITES; i++)
+			SpritesNew[i].SetTexture(SpritesModNames[i]);
 
 		CTxdStore::PopCurrentTxd();
 
@@ -121,8 +71,8 @@ void CHudNew::Initialise() {
 
 void CHudNew::Shutdown() {
 	if (ms_bSpritesLoaded) {
-		for (int i = 0; i < HUD_TOTALWEAPONS; ++i)
-			SpritesMod[i].Delete();
+		for (int i = 0; i < HUD_TOTALSPRITES; ++i)
+			SpritesNew[i].Delete();
 
 		int Slot = CTxdStore::FindTxdSlot("weapons");
 		CTxdStore::RemoveTxdSlot(Slot);
@@ -138,8 +88,8 @@ void CHudNew::ReInitialise() {
 		CHudNew::Initialise();
 		CFontNew::Shutdown();
 		CFontNew::Initialise();
-		CRadarNew::Shutdown();
-		CRadarNew::Initialise();
+		//CRadarNew::Shutdown();
+		//CRadarNew::Initialise();
 		ms_bReload = true;
 	}
 }
@@ -493,7 +443,7 @@ void CHudNew::DrawWeaponIcon(int PlayerID, float x, float y, float w, float h) {
 	CRGBA color = CRGBA(s.HUD_COLOR_WEAPON_ICON);
 
 	if (ModelId <= MODEL_NULL) 
-		SpritesMod[HUD_UNARMED].Draw(CRect(SCREEN_RIGHT(x), SCREEN_TOP(y), SCREEN_RIGHT(w), SCREEN_TOP(h)), CRGBA(color));
+		SpritesNew[HUD_UNARMED].Draw(CRect(SCREEN_RIGHT(x), SCREEN_TOP(y), SCREEN_RIGHT(w), SCREEN_TOP(h)), CRGBA(color));
 	else {
 		if (txd) {
 			RwTexture *pTexture = RwTexDictionaryFindHashNamedTexture(txd, index->m_nKey);
@@ -614,7 +564,7 @@ void CHudNew::DrawWanted(float x, float y, float w, float h) {
 		CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
-		for (int i = 0; i < 6; i++) {
+		for (unsigned int i = 0; i < 6; i++) {
 			if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nWantedLevel > i
 				&& (CTimer::m_snTimeInMilliseconds > CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nLastTimeWantedLevelChanged
 					+ 2000 || CTimer::m_FrameCounter & 8))
@@ -640,7 +590,7 @@ void CHudNew::DrawWanted(float x, float y, float w, float h) {
 		CFont::SetColor(CRGBA(s.HUD_COLOR_WANTED_N));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 
-		for (int i = 0; i < 6; i++) {
+		for (unsigned int i = 0; i < 6; i++) {
 			if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nWantedLevel > i
 				&& (CTimer::m_snTimeInMilliseconds > CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nLastTimeWantedLevelChanged
 					+ 2000 || CTimer::m_FrameCounter & 8)) 
@@ -667,7 +617,7 @@ void CHudNew::DrawWanted(float x, float y, float w, float h) {
 		if (static_cast<float>(CWorld::Players[CWorld::PlayerInFocus].m_nMaxHealth) > 101.0f)
 			fOffset = 12.0f;
 
-		for (int i = 0; i < 6; i++) {
+		for (unsigned int i = 0; i < 6; i++) {
 			if (CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nWantedLevel > i
 				&& (CTimer::m_snTimeInMilliseconds > CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWanted()->m_nLastTimeWantedLevelChanged
 					+ 2000 || CTimer::m_FrameCounter & 8)) {
@@ -731,7 +681,7 @@ void CHudNew::DrawAreaName(float x, float y, float w, float h) {
 					CHud::m_ZoneToPrint = CHud::m_pZoneName;
 
 					if (CHud::m_VehicleState == 1 || CHud::m_VehicleState == 2)
-						CHud::m_VehicleState == 3;
+						CHud::m_VehicleState = 3;
 				}
 				break;
 			case 1:
@@ -753,7 +703,7 @@ void CHudNew::DrawAreaName(float x, float y, float w, float h) {
 		if (State) {
 			switch (State) {
 			case 1:
-				if (CHud::m_ZoneNameTimer > 3000) {
+				if (CHud::m_ZoneNameTimer > AREA_NAME_TIME) {
 					CHud::m_ZoneFadeTimer = 1000;
 					CHud::m_ZoneState = 3;
 				}
@@ -874,7 +824,7 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 					CHud::m_pVehicleNameToPrint = CHud::m_pVehicleName;
 
 					if (CHud::m_VehicleState == 1 || CHud::m_VehicleState == 2)
-						CHud::m_VehicleState == 3;
+						CHud::m_VehicleState = 3;
 				}
 				break;
 			case 1:
@@ -896,7 +846,7 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 		if (State) {
 			switch (State) {
 			case 1:
-				if (CHud::m_VehicleNameTimer > 3000) {
+				if (CHud::m_VehicleNameTimer > VEHICLE_NAME_TIME) {
 					CHud::m_VehicleFadeTimer = 1000;
 					CHud::m_VehicleState = 3;
 				}
@@ -1094,6 +1044,102 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 				CFont::DrawFonts();
 			}
 		}
+	}
+}
+
+void CHudNew::DrawTextBox() {
+	if (CTimer::m_UserPause /*|| CReplay::Mode != 1*/)
+		return;
+
+	if (CHud::m_pHelpMessage[0]) {
+		if (!CMessages::StringCompare(CHud::m_pHelpMessage, CHud::m_pLastHelpMessage, 400)) {
+			switch (CHud::m_nHelpMessageState) {
+			case 0:
+				CHud::m_nHelpMessageState = 2;
+				CHud::m_nHelpMessageTimer = 0;
+				CHud::m_nHelpMessageFadeTimer = 0;
+				CMessages::StringCopy(CHud::m_pHelpMessageToPrint, CHud::m_pHelpMessage, 400);
+				CHud::m_fHelpMessageTime = CMessages::GetStringLength(CHud::m_pHelpMessage) * 0.05f + 3.0f;
+				// CAudioEngine::ReportFrontendAudioEvent missing.
+				break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				CHud::m_nHelpMessageState = 4;
+				CHud::m_nHelpMessageTimer = 5;
+				break;
+			default:
+				break;
+			}
+			CMessages::StringCopy(CHud::m_pLastHelpMessage, CHud::m_pHelpMessage, 400);
+		}
+
+		float fAlpha = 255.0f;
+
+		if (CHud::m_nHelpMessageState) {
+			switch (CHud::m_nHelpMessageState) {
+			case 1:
+				fAlpha = 255.0f;
+				CHud::m_nHelpMessageFadeTimer = 600;
+				if (CHud::m_nHelpMessageFadeTimer > CHud::m_fHelpMessageTime * 1000 || CHud::m_bHelpMessageQuick && CHud::m_nHelpMessageTimer > 1500) {
+					CHud::m_nHelpMessageFadeTimer = 0;
+					CHud::m_nHelpMessageState = 1;
+				}
+				break;
+			case 2:
+				CHud::m_nHelpMessageFadeTimer += 2 * (CTimer::ms_fTimeStep * 0.02f * 1000.0f);
+				if (CHud::m_nHelpMessageFadeTimer > 0) {
+					CHud::m_nHelpMessageFadeTimer = 0;
+					CHud::m_nHelpMessageState = 1;
+				}
+				fAlpha = CHud::m_nHelpMessageFadeTimer * 0.001f * 255.0f;
+				break;
+			case 3:
+				CHud::m_nHelpMessageFadeTimer += 2 * (CTimer::ms_fTimeStep * 0.02f * -1000.0f);
+				if (CHud::m_nHelpMessageFadeTimer >= 0) {
+					CHud::m_nHelpMessageFadeTimer = 0;
+					CHud::m_nHelpMessageState = 0;
+				}
+				fAlpha = CHud::m_nHelpMessageFadeTimer * 0.001f * 255.0f;
+				break;
+			case 4:
+				CHud::m_nHelpMessageFadeTimer += 2 * (CTimer::ms_fTimeStep * 0.02f * -1000.0f);
+				if (CHud::m_nHelpMessageFadeTimer >= 0) {
+					CHud::m_nHelpMessageFadeTimer = 0;
+					CHud::m_nHelpMessageState = 2;
+					CMessages::StringCopy(CHud::m_pHelpMessageToPrint, CHud::m_pLastHelpMessage, 400);
+				}
+				fAlpha = CHud::m_nHelpMessageFadeTimer * 0.001f * 255.0f;
+				break;
+			default:
+				break;
+			}
+
+			CHud::m_nHelpMessageTimer += (CTimer::ms_fTimeStep * 0.02f * 1000.0f);
+
+			if (GetGameMode() == GAMEMODE_III) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_VC) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_SA) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_LCS) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_VCS) {
+
+			}
+			else if (GetGameMode() == GAMEMODE_ADVANCE) {
+
+			}
+		}
+	}
+	else {
+		CHud::m_nHelpMessageState = 0;
 	}
 }
 

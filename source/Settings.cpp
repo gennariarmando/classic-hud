@@ -1,5 +1,7 @@
 #include "plugin.h"
 #include "CHudNew.h"
+#include "CFileMgr.h"
+#include "CFileLoader.h"
 #include "Settings.h"
 
 using namespace plugin;
@@ -7,14 +9,14 @@ using namespace plugin;
 Settings s;
 
 void Settings::readIni() {
-	config_file ini(PLUGIN_PATH("classichud\\classichud.ini"));
+	config_file ini(PLUGIN_PATH("classichud.ini"));
 
 	READ_BOOL(ini, m_bEnable, "m_bEnable", false);
 	READ_STR(ini, m_nGameMode, "m_nGameMode", "");
 }
 
 void Settings::readDat() {
-	// Data
+	// Hud data
 	config_file hud(PLUGIN_PATH(SetFileWithPrefix("classichud\\data\\", "hud.dat")));
 
 	CRect rect = CRect(0.0f, 0.0f, 0.0f, 0.0f);
@@ -47,4 +49,20 @@ void Settings::readDat() {
 	READ_RGBA(hudColor, HUD_COLOR_VEHICLE_NAME, "HUD_COLOR_VEHICLE_NAME", rgba);
 	READ_RGBA(hudColor, HUD_COLOR_RADIO_NAME_N, "HUD_COLOR_RADIO_NAME_N", rgba);
 	READ_RGBA(hudColor, HUD_COLOR_RADIO_NAME_A, "HUD_COLOR_RADIO_NAME_A", rgba);
+}
+
+void Settings::readBlipsDat() {
+	std::ifstream file(PLUGIN_PATH("classichud\\data\\shared\\blips.dat"));
+	if (file.is_open()) {
+		for (std::string line; getline(file, line); ) {
+			if (line[0] && line[0] != '#') {
+				char str[64];
+				unsigned int typeID;
+				if (sscanf(line.c_str(), "%d %s", &typeID, &str) == 2) {
+					m_nBlipsCounter = typeID;
+					m_pBlipNames[m_nBlipsCounter] = str;
+				}
+			}
+		}
+	}
 }
