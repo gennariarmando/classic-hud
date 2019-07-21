@@ -440,7 +440,7 @@ void CHudNew::DrawBreath(int PlayerID, float x, float y, float w, float h) {
 				CFont::SetBackground(false, false);
 				CFont::SetOrientation(ALIGN_RIGHT);
 				CFont::SetRightJustifyWrap(0.0f);
-				CFont::SetFontStyle(III_FONT_PRICEDOWN);
+				CFont::SetFontStyle(VC_FONT_PRICEDOWN);
 				CFont::SetEdge(0);
 				CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
 				CFont::SetDropColor(CRGBA(0, 0, 0, 255));
