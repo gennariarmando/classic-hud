@@ -2,13 +2,18 @@
 #define READ_BOOL(set, a, b, c) a = set[b].asBool(c)
 #define READ_INT(set, a, b, c) a = set[b].asInt(c)
 #define READ_STR(set, a, b, c) a = set[b].asString(c)
+#define READ_FLOAT(set, a, b, c) a = set[b].asFloat(c)
 #define READ_RECT(set, a, b, c) a = set[b].asRect(c)
 #define READ_RGBA(set, a, b, c) a = set[b].asRGBA(c)
+
+#include "CRadarNew.h"
 
 class Settings {
 public:
 	bool m_bEnable;
 	std::string m_nGameMode, m_nGameModeTemp;
+	float m_fHudW, m_fHudH;
+	float m_fRadarW, m_fRadarH;
  
 	CRect m_fClock, m_fClockTemp;
 	CRect m_fMoney, m_fMoneyTemp;
@@ -22,6 +27,8 @@ public:
 	CRect m_fVehicleName, m_fVehicleNameTemp;
 	CRect m_fRadioName, m_fRadioNameTemp;
 	CRect m_fTextBox, m_fTextBoxTemp;
+	CRect m_fRadarMap, m_fRadarMapTemp;
+	CRect m_fRadarSprites, m_fRadarSpritesTemp;
 
 	CRGBA HUD_COLOR_CLOCK, HUD_COLOR_CLOCK_TEMP;
 	CRGBA HUD_COLOR_CASH, HUD_COLOR_CASH_TEMP;
@@ -35,8 +42,8 @@ public:
 	CRGBA HUD_COLOR_VEHICLE_NAME, HUD_COLOR_VEHICLE_NAME_TEMP;
 	CRGBA HUD_COLOR_RADIO_NAME_N, HUD_COLOR_RADIO_NAME_A, HUD_COLOR_RADIO_NAME_N_TEMP, HUD_COLOR_RADIO_NAME_A_TEMP;
 
-	int m_nBlipsCounter;
-	char *m_pBlipNames[64];
+	unsigned int m_nBlipsCounter;
+	char *m_pBlipNames[MAX_BLIPS];
 
 public:
 	void readIni();
@@ -59,6 +66,13 @@ public:
 		strcat_s(FileName, file);
 		puts(FileName);
 		return FileName;
+	}
+
+	inline void Multiply(CRect &src, float x, float y) {
+		src.left = src.left * x;
+		src.right = src.right * x;
+		src.top = src.top * y;
+		src.bottom = src.bottom * y;
 	}
 };
 

@@ -18,3 +18,6 @@ HUD_WANTED                  28.0  90.0     0.8    1.35
 HUD_ZONE_NAME               32.0  30.0     1.2    1.2
 HUD_VEHICLE_NAME            32.0  55.0     1.2    1.2
 HUD_RADIO_NAME               0.0  22.0     0.8    1.35
+
+HUD_RADAR_MAP               40.0   47.0    94.0   76.0
+HUD_RADAR_SPRITES           36.0   43.0   138.0  127.0

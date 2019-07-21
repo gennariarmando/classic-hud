@@ -1,12 +1,5 @@
 #pragma once
 #include "CFont.h"
-
-struct tFontData {
-	char m_propValues[208];
-	char m_spaceValue;
-	char m_unpropValue;
-};
-
 enum {
 	// GAMEMODE_III
 	III_FONT_SUBTITLES = 0,

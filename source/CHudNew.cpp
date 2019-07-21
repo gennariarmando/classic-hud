@@ -4,38 +4,48 @@
 #include "CFont.h"
 #include "CTxdStore.h"
 #include "CWorld.h"
-#include "eModelID.h"
 #include "ScreenAddition.h"
 #include "eWeaponType.h"
-#include "CDarkel.h"
 #include "CMenuManager.h"
 #include "CTheScripts.h"
 #include "CCamera.h"
 #include "CTimer.h"
 #include "CCutsceneMgr.h"
-#include "CEntryExitManager.h"
-#include "CAERadioTrackManager.h"
-#include "CText.h"
 #include "CHudNew.h"
 #include "CFontNew.h"
 #include "CRadarNew.h"
 #include "Settings.h"
 #include "CModelInfo.h"
-#include "CRadar.h"
 #include "CStats.h"
 #include "CMessages.h"
 #include "CGarages.h"
+#include "CReplay.h"
+#if GTASA
+#include "eModelID.h"
+#include "CDarkel.h"
+#include "CEntryExitManager.h"
+#include "CAERadioTrackManager.h"
+#include "CText.h"
+#include "CRadar.h"
+#endif
 
 using namespace plugin;
 
 eGameMode CHudNew::ms_nGameMode;
 CSprite2d CHudNew::SpritesNew[HUD_TOTALSPRITES];
+CSprite2d CHudNew::SharedSprites[SHARED_TOTALSPRITES];
+
 bool CHudNew::ms_bSpritesLoaded;
 char *CHudNew::ms_nGamePrefix;
 bool CHudNew::ms_bReload;
 
 char *SpritesModNames[HUD_TOTALSPRITES] = {
 	"unarmed"
+};
+
+char *SharedNames[SHARED_TOTALSPRITES] = {
+	"breathicon",
+	"skipicon"
 };
 
 void CHudNew::Initialise() {
@@ -52,14 +62,25 @@ void CHudNew::Initialise() {
 	}
 
 	if (!ms_bSpritesLoaded) {
-		int Slot = CTxdStore::AddTxdSlot("weapons");
-		CTxdStore::LoadTxd(Slot, PLUGIN_PATH(s.SetFileWithPrefix("classichud\\weapons\\", "weapons.txd")));
-		CTxdStore::AddRef(Slot);
+		int WeaponSlot = CTxdStore::AddTxdSlot("weapons");
+		CTxdStore::LoadTxd(WeaponSlot, PLUGIN_PATH(s.SetFileWithPrefix("classichud\\weapons\\", "weapons.txd")));
+		CTxdStore::AddRef(WeaponSlot);
 		CTxdStore::PopCurrentTxd();
-		CTxdStore::SetCurrentTxd(Slot);
+		CTxdStore::SetCurrentTxd(WeaponSlot);
 
 		for (int i = 0; i < HUD_TOTALSPRITES; i++)
 			SpritesNew[i].SetTexture(SpritesModNames[i]);
+
+		CTxdStore::PopCurrentTxd();
+
+		int SharedSlot  = CTxdStore::AddTxdSlot("shared");
+		CTxdStore::LoadTxd(SharedSlot, PLUGIN_PATH(s.SetSharedFile("classichud\\shared\\", "shared.txd")));
+		CTxdStore::AddRef(SharedSlot);
+		CTxdStore::PopCurrentTxd();
+		CTxdStore::SetCurrentTxd(SharedSlot);
+
+		for (int i = 0; i < SHARED_TOTALSPRITES; i++)
+			SharedSprites[i].SetTexture(SharedNames[i]);
 
 		CTxdStore::PopCurrentTxd();
 
@@ -74,8 +95,14 @@ void CHudNew::Shutdown() {
 		for (int i = 0; i < HUD_TOTALSPRITES; ++i)
 			SpritesNew[i].Delete();
 
-		int Slot = CTxdStore::FindTxdSlot("weapons");
-		CTxdStore::RemoveTxdSlot(Slot);
+		int WeaponSlot = CTxdStore::FindTxdSlot("weapons");
+		CTxdStore::RemoveTxdSlot(WeaponSlot);
+
+		for (int i = 0; i < SHARED_TOTALSPRITES; ++i)
+			SharedSprites[i].Delete();
+
+		int SharedSlot = CTxdStore::FindTxdSlot("shared");
+		CTxdStore::RemoveTxdSlot(SharedSlot);
 
 		ms_bSpritesLoaded = false;
 	}
@@ -88,13 +115,15 @@ void CHudNew::ReInitialise() {
 		CHudNew::Initialise();
 		CFontNew::Shutdown();
 		CFontNew::Initialise();
-		//CRadarNew::Shutdown();
-		//CRadarNew::Initialise();
+		CRadarNew::Shutdown();
+		CRadarNew::Initialise();
 		ms_bReload = true;
 	}
 }
 
 void CHudNew::Draw() {
+	ScreenAddition::SetScreenMult(s.m_fHudW, s.m_fHudH);
+
 	if (!TheCamera.m_bWideScreenOn) {
 		if (FrontEndMenuManager.m_bHudOn && CTheScripts::bDisplayHud) {
 			RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void*)FALSE);
@@ -130,6 +159,8 @@ void CHudNew::Draw() {
 			ms_bReload = false;
 		}
 	}
+
+	ScreenAddition::SetScreenMult(DEFAULT_HUD_SCALE);
 }
 
 void CHudNew::DrawClock(float x, float y, float w, float h) {
@@ -169,7 +200,7 @@ void CHudNew::DrawClock(float x, float y, float w, float h) {
 		CFont::SetRightJustifyWrap(0.0f);
 		CFont::SetFontStyle(SA_FONT_PRICEDOWN);
 		CFont::SetDropShadowPosition(0);
-		CFont::SetEdge(2);
+		CFont::SetEdge(SA_EDGE_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 		CFont::SetColor(CRGBA(s.HUD_COLOR_CLOCK));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
@@ -223,7 +254,7 @@ void CHudNew::DrawMoneyCounter(float x, float y, float w, float h) {
 		CFont::SetRightJustifyWrap(0.0f);
 		CFont::SetFontStyle(SA_FONT_PRICEDOWN);
 		CFont::SetDropShadowPosition(0);
-		CFont::SetEdge(2);
+		CFont::SetEdge(SA_EDGE_SIZE);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 		CFont::SetColor(CRGBA(s.HUD_COLOR_CASH));
 		CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
@@ -385,7 +416,6 @@ void CHudNew::DrawBreath(int PlayerID, float x, float y, float w, float h) {
 	if (CWorld::Players[PlayerID].m_pPed->m_nPhysicalFlags.bSubmergedInWater) {
 		if (CHud::m_ItemToFlash != 10 || CTimer::m_FrameCounter & 8) {
 			if (GetGameMode() == GAMEMODE_III) {
-				strcpy_s(IconToPrint, "b");
 				sprintf_s(TextToPrint, "%03d", nProgress);
 
 				CFont::SetProportional(false);
@@ -395,14 +425,15 @@ void CHudNew::DrawBreath(int PlayerID, float x, float y, float w, float h) {
 				CFont::SetFontStyle(III_FONT_PRICEDOWN);
 				CFont::SetEdge(0);
 				CFont::SetDropShadowPosition(III_VC_SHADOW_SIZE);
-				CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+				CFont::SetDropColor(CRGBA(0, 0, 0, s.HUD_COLOR_BREATH.a));
 				CFont::SetColor(CRGBA(s.HUD_COLOR_BREATH));
 				CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 				CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+
+				SharedSprites[SHARED_BREATHICON].Draw(CRect(SCREEN_RIGHT(x + 69.5f), SCREEN_TOP(y + 7.5f), SCREEN_RIGHT(x + 69.5f) + SCREEN_LEFT(w * 25.0f), SCREEN_TOP(y + 7.5f) + SCREEN_TOP(h * 13.0f)), CRGBA(0, 0, 0, s.HUD_COLOR_BREATH.a));
+				SharedSprites[SHARED_BREATHICON].Draw(CRect(SCREEN_RIGHT(x + 71.0f), SCREEN_TOP(y + 6.0f), SCREEN_RIGHT(x + 71.0f) + SCREEN_LEFT(w * 25.0f), SCREEN_TOP(y + 6.0f) + SCREEN_TOP(h * 13.0f)), CRGBA(s.HUD_COLOR_BREATH));
 			}
 			else if (GetGameMode() == GAMEMODE_VC) {
-				strcpy_s(IconToPrint, "b");
 				sprintf_s(TextToPrint, "%03d", nProgress);
 
 				CFont::SetProportional(false);
@@ -416,7 +447,9 @@ void CHudNew::DrawBreath(int PlayerID, float x, float y, float w, float h) {
 				CFont::SetColor(CRGBA(s.HUD_COLOR_BREATH));
 				CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
 				CFont::PrintString(SCREEN_RIGHT(x), SCREEN_TOP(y), TextToPrint);
-				CFont::PrintString(SCREEN_RIGHT(x + 54.0f), SCREEN_TOP(y), IconToPrint);
+
+				SharedSprites[SHARED_BREATHICON].Draw(CRect(SCREEN_RIGHT(x + 69.5f), SCREEN_TOP(y + 7.5f), SCREEN_RIGHT(x + 69.5f) + SCREEN_LEFT(w * 25.0f), SCREEN_TOP(y + 7.5f) + SCREEN_TOP(h * 13.0f)), CRGBA(0, 0, 0, s.HUD_COLOR_BREATH.a));
+				SharedSprites[SHARED_BREATHICON].Draw(CRect(SCREEN_RIGHT(x + 71.5f), SCREEN_TOP(y + 6.0f), SCREEN_RIGHT(x + 71.5f) + SCREEN_LEFT(w * 25.0f), SCREEN_TOP(y + 6.0f) + SCREEN_TOP(h * 13.0f)), CRGBA(s.HUD_COLOR_BREATH));
 			}
 			else if (GetGameMode() == GAMEMODE_SA) {
 				DrawProgressBar(SCREEN_RIGHT(x + w), SCREEN_TOP(y), SCREEN_LEFT(w), SCREEN_TOP(h), fProgress, SCREEN_TOP(2.5f), 0, CRGBA(s.HUD_COLOR_BREATH), CRGBA(s.HUD_COLOR_BREATH.r, s.HUD_COLOR_BREATH.g, s.HUD_COLOR_BREATH.b, 150));
@@ -780,7 +813,7 @@ void CHudNew::DrawAreaName(float x, float y, float w, float h) {
 					CFont::SetSlant(0.0f);
 					CFont::SetFontStyle(SA_FONT_GOTHIC);
 					CFont::SetDropShadowPosition(0);
-					CFont::SetEdge(2);
+					CFont::SetEdge(SA_EDGE_SIZE);
 					CFont::SetDropColor(CRGBA(0, 0, 0, fZoneAlpha));
 					CFont::SetColor(CRGBA(s.HUD_COLOR_ZONE_NAME.r, s.HUD_COLOR_ZONE_NAME.g, s.HUD_COLOR_ZONE_NAME.b, fZoneAlpha));
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
@@ -811,37 +844,28 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 	if (CHud::m_pVehicleName) {
 		float fVehicleAlpha = 0.0f;
 		int State = CHud::m_VehicleState;
-		if (CHud::m_pVehicleName != CHud::m_pLastVehicleName) {
-			switch (CHud::m_VehicleState) {
-			case 0:
-				if (!CTheScripts::bPlayerIsOffTheMap && CTheScripts::bDisplayHud ||
-					CEntryExitManager::ms_exitEnterState == 1 ||
-					CEntryExitManager::ms_exitEnterState == 2) {
-					State = 2;
-					CHud::m_VehicleState = 2;
-					CHud::m_VehicleNameTimer = 0;
-					CHud::m_VehicleFadeTimer = 0;
-					CHud::m_pVehicleNameToPrint = CHud::m_pVehicleName;
+		char *pLast = CHud::m_pLastVehicleName;
 
-					if (CHud::m_VehicleState == 1 || CHud::m_VehicleState == 2)
-						CHud::m_VehicleState = 3;
+		if (CHud::m_pVehicleName != CHud::m_pLastVehicleName) {
+			if (CHud::m_VehicleState) {
+				if (CHud::m_VehicleState > 0 && CHud::m_VehicleState <= 4) {
+					State = 4;
+					CHud::m_VehicleState = 4;
+					CHud::m_VehicleNameTimer = 0;
 				}
-				break;
-			case 1:
-			case 2:
-			case 3:
-				State = 4;
-				CHud::m_VehicleState = 4;
-			case 4:
-				CHud::m_VehicleNameTimer = 0;
-				break;
-			default:
-				break;
 			}
+			else {
+				State = 2;
+				CHud::m_VehicleState = 2;
+				CHud::m_VehicleNameTimer = 0;
+				CHud::m_VehicleFadeTimer = 0;
+				CHud::m_pVehicleNameToPrint = CHud::m_pVehicleName;
+				if (CHud::m_ZoneState == 1 || CHud::m_ZoneState == 2)
+					CHud::m_ZoneState = 3;
+			}
+			pLast = CHud::m_pVehicleName;
 			CHud::m_pLastVehicleName = CHud::m_pVehicleName;
 		}
-
-		fVehicleAlpha = 255.0f;
 
 		if (State) {
 			switch (State) {
@@ -875,7 +899,7 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 				if (CHud::m_VehicleFadeTimer < 0) {
 					CHud::m_VehicleFadeTimer = 0;
 					CHud::m_VehicleState = 2;
-					CHud::m_pVehicleNameToPrint = CHud::m_pVehicleName;
+					CHud::m_pVehicleNameToPrint = pLast;
 				}
 				fVehicleAlpha = CHud::m_VehicleFadeTimer * 0.001f * 255.0f;
 				break;
@@ -924,7 +948,7 @@ void CHudNew::DrawVehicleName(float x, float y, float w, float h) {
 					CFont::SetSlant(0.0f);
 					CFont::SetFontStyle(SA_FONT_MENU);
 					CFont::SetDropShadowPosition(0);
-					CFont::SetEdge(2);
+					CFont::SetEdge(SA_EDGE_SIZE);
 					CFont::SetDropColor(CRGBA(0, 0, 0, fVehicleAlpha));
 					CFont::SetColor(CRGBA(s.HUD_COLOR_VEHICLE_NAME.r, s.HUD_COLOR_VEHICLE_NAME.g, s.HUD_COLOR_VEHICLE_NAME.b, fVehicleAlpha));
 					CFont::SetScale(SCREEN_LEFT(w), SCREEN_TOP(h));
@@ -958,7 +982,7 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 		&& !CTimer::m_CodePause
 		&& !TheCamera.m_bWideScreenOn
 		&& FindPlayerVehicle(-1, 0)
-		/*&& CReplay::Mode != 1*/)
+		&& CReplay::Mode != 1)
 	{
 		if (AERadioTrackManager.field_1 && AERadioTrackManager.IsVehicleRadioActive())
 		{
@@ -1048,7 +1072,7 @@ void CHudNew::DrawRadioStation(float x, float y, float w, float h) {
 }
 
 void CHudNew::DrawTextBox() {
-	if (CTimer::m_UserPause /*|| CReplay::Mode != 1*/)
+	if (CTimer::m_UserPause || CReplay::Mode != 1)
 		return;
 
 	if (CHud::m_pHelpMessage[0]) {

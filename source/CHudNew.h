@@ -1,6 +1,7 @@
 #pragma once
 #define BLANK NULL
-#define III_VC_SHADOW_SIZE 2
+#define III_VC_SHADOW_SIZE (2 * s.m_fHudW)
+#define SA_EDGE_SIZE (2)
 #define AREA_NAME_TIME 5000
 #define VEHICLE_NAME_TIME 5000
 
@@ -22,9 +23,16 @@ enum eHudSpritesNew {
 	HUD_TOTALSPRITES
 };
 
+enum eSharedSprites {
+	SHARED_BREATHICON,
+	SHARED_SKIPICON,
+	SHARED_TOTALSPRITES
+};
+
 class CHudNew {
 public:
 	static CSprite2d SpritesNew[HUD_TOTALSPRITES];
+	static CSprite2d SharedSprites[SHARED_TOTALSPRITES];
 	static eGameMode ms_nGameMode;
 	static bool ms_bSpritesLoaded;
 	static char *ms_nGamePrefix;

@@ -5,9 +5,6 @@
 #include "Settings.h"
 
 using namespace plugin;
-
-tFontData *gFontData = (tFontData *)0xC718B0;
-
 bool CFontNew::ms_bFontsLoaded;
 
 int III_Size[2][13 * 16] = {
@@ -127,22 +124,28 @@ void CFontNew::Initialise() {
 
 		for (int i = 0; i < 208; i++) {
 			if (CHudNew::GetGameMode() == GAMEMODE_III) {
+#if GTASA
 				gFontData[0].m_propValues[i] = III_Size[0][i];
 				gFontData[1].m_propValues[i] = III_Size[1][i];
 				gFontData[0].m_unpropValue = III_Size[1][192];
 				gFontData[1].m_unpropValue = III_Size[1][192];
+#endif
 			}
 			else if (CHudNew::GetGameMode() == GAMEMODE_VC) {
+#if GTASA
 				gFontData[0].m_propValues[i] = VC_Size[0][i];
 				gFontData[1].m_propValues[i] = VC_Size[1][i];
 				gFontData[0].m_unpropValue = VC_Size[1][207];
 				gFontData[1].m_unpropValue = VC_Size[1][207];
+#endif
 			}
 			else if (CHudNew::GetGameMode() == GAMEMODE_SA) {
+#if GTASA
 				gFontData[0].m_propValues[i] = SA_Size[0][i];
 				gFontData[1].m_propValues[i] = SA_Size[1][i];
 				gFontData[0].m_unpropValue = 27;
 				gFontData[1].m_unpropValue = 20;
+#endif
 			}
 			else if (CHudNew::GetGameMode() == GAMEMODE_LCS) {
 
@@ -172,6 +175,7 @@ void CFontNew::Shutdown() {
 }
 
 void CFontNew::SetFontStyle(int Font) {
+#if GTASA
 	if (CHudNew::GetGameMode() == GAMEMODE_III) {
 		if (Font > III_FONT_PRICEDOWN)
 			Font = III_FONT_PRICEDOWN;
@@ -212,6 +216,7 @@ void CFontNew::SetFontStyle(int Font) {
 	else if (CHudNew::GetGameMode() == GAMEMODE_ADVANCE) {
 
 	}
+#endif
 }
 
 void CFontNew::InjectPatches() {

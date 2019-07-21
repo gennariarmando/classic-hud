@@ -7,12 +7,18 @@
 using namespace plugin;
 
 Settings s;
+int m_nBlipsCounter;
+char *m_pBlipNames[300];
 
 void Settings::readIni() {
 	config_file ini(PLUGIN_PATH("classichud.ini"));
 
-	READ_BOOL(ini, m_bEnable, "m_bEnable", false);
-	READ_STR(ini, m_nGameMode, "m_nGameMode", "");
+	READ_BOOL(ini, m_bEnable, "m_bEnable", true);
+	READ_STR(ini, m_nGameMode, "m_nGameMode", "SA");
+	READ_FLOAT(ini, m_fHudW, "m_fHudWidthScale", 1.0f);
+	READ_FLOAT(ini, m_fHudH, "m_fHudHeightScale", 1.0f);
+	READ_FLOAT(ini, m_fRadarW, "m_fRadarWidthScale", 1.0f);
+	READ_FLOAT(ini, m_fRadarH, "m_fRadarHeightScale", 1.0f);
 }
 
 void Settings::readDat() {
@@ -31,6 +37,8 @@ void Settings::readDat() {
 	READ_RECT(hud, m_fZoneName, "HUD_ZONE_NAME", rect);
 	READ_RECT(hud, m_fVehicleName, "HUD_VEHICLE_NAME", rect);
 	READ_RECT(hud, m_fRadioName, "HUD_RADIO_NAME", rect);
+	READ_RECT(hud, m_fRadarMap, "HUD_RADAR_MAP", rect);
+	READ_RECT(hud, m_fRadarSprites, "HUD_RADAR_SPRITES", rect);
 
 	// Color data
 	config_file hudColor(PLUGIN_PATH(SetFileWithPrefix("classichud\\data\\", "hudColor.dat")));
@@ -54,15 +62,30 @@ void Settings::readDat() {
 void Settings::readBlipsDat() {
 	std::ifstream file(PLUGIN_PATH("classichud\\data\\shared\\blips.dat"));
 	if (file.is_open()) {
-		for (std::string line; getline(file, line); ) {
-			if (line[0] && line[0] != '#') {
-				char str[64];
-				unsigned int typeID;
-				if (sscanf(line.c_str(), "%d %s", &typeID, &str) == 2) {
-					m_nBlipsCounter = typeID;
-					m_pBlipNames[m_nBlipsCounter] = str;
-				}
+		char str[64];
+		unsigned int iconID;
+
+		for (std::string line; getline(file, line);) {
+			if (!line[0] || line[0] == '#')
+				continue;
+
+			str[0] = NULL;
+			sscanf(line.c_str(), "%d %s", &iconID, &str);
+
+			if (iconID >= MAX_BLIPS) {
+				Error("blips.dat contains more than %d lines.", iconID);
+				exit(0);
 			}
+
+			int l = strlen(str);
+			char* strAlloc = new char[l + 1];
+			strcpy(strAlloc, str);
+
+			m_pBlipNames[iconID] = strAlloc;
 		}
+	}
+	else {
+		Error("blips.dat in: 'classichud\\data\\shared' not found.");
+		exit(0);
 	}
 }
