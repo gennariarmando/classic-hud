@@ -1,14 +1,11 @@
 #include "plugin.h"
-#include "CHudNew.h"
-#include "CFileMgr.h"
-#include "CFileLoader.h"
 #include "Settings.h"
 
 using namespace plugin;
 
 Settings s;
 int m_nBlipsCounter;
-char *m_pBlipNames[300];
+char *m_pBlipNames[MAX_BLIPS];
 
 void Settings::readIni() {
 	config_file ini(PLUGIN_PATH("classichud.ini"));
@@ -19,6 +16,8 @@ void Settings::readIni() {
 	READ_FLOAT(ini, m_fHudH, "m_fHudHeightScale", 1.0f);
 	READ_FLOAT(ini, m_fRadarW, "m_fRadarWidthScale", 1.0f);
 	READ_FLOAT(ini, m_fRadarH, "m_fRadarHeightScale", 1.0f);
+	READ_FLOAT(ini, m_fSubsW, "m_fSubtitlesWidthScale", 1.0f);
+	READ_FLOAT(ini, m_fSubsH, "m_fSubtitlesHeightScale", 1.0f);
 }
 
 void Settings::readDat() {
@@ -37,6 +36,9 @@ void Settings::readDat() {
 	READ_RECT(hud, m_fZoneName, "HUD_ZONE_NAME", rect);
 	READ_RECT(hud, m_fVehicleName, "HUD_VEHICLE_NAME", rect);
 	READ_RECT(hud, m_fRadioName, "HUD_RADIO_NAME", rect);
+	READ_RECT(hud, m_fTextBox, "HUD_HELP_TEXT", rect);
+	READ_RECT(hud, m_fSubtitles, "HUD_SUBTITLES", rect);
+
 	READ_RECT(hud, m_fRadarMap, "HUD_RADAR_MAP", rect);
 	READ_RECT(hud, m_fRadarSprites, "HUD_RADAR_SPRITES", rect);
 

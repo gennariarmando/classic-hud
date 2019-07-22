@@ -1,5 +1,6 @@
 #pragma once
 #include "CFont.h"
+
 enum {
 	// GAMEMODE_III
 	III_FONT_SUBTITLES = 0,
@@ -22,8 +23,9 @@ public:
 	static bool ms_bFontsLoaded;
 
 public:
+	CFontNew();
+
 	static void Initialise();
 	static void Shutdown();
 	static void SetFontStyle(int Font);
-	static void InjectPatches();
 };

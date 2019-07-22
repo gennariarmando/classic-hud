@@ -27,15 +27,19 @@ workspace "ClassicHud"
     disablewarnings { "4073", "4221", "4244" }
 
 	files { 
-	"include/screen_addition/*.*",
-	"source/*.*"
+	"include/extensions/*.*",
+	"source/*.*",
+	"source/render/*.*",
+	"source/settings/*.*"
 	}
 
 	includedirs { 
-	"include/screen_addition/",
+	"include/extensions/",
 	"$(PLUGIN_SDK_DIR)/shared/",
 	"$(PLUGIN_SDK_DIR)/shared/game/",
-	"source"
+	"source/",
+	"source/render/",
+	"source/settings/"
 	}
 	
 	libdirs { 

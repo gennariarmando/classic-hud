@@ -1,9 +1,9 @@
-﻿#include "ScreenAddition.h"
+﻿#include "ScreenAddons.h"
 #include "CDraw.h"
 
-float ScreenAddition::ms_fScreenMultiplier[2];
+float ScreenAddons::ms_fScreenMultiplier[2];
 
-float ScreenAddition::GetAspectRatio() {
+float ScreenAddons::GetAspectRatio() {
 #if GTA3
 	return *(float*)0x5F53C0;
 #elif GTAVC
@@ -13,11 +13,11 @@ float ScreenAddition::GetAspectRatio() {
 #endif
 }
 
-float ScreenAddition::GetScreenMult(bool h) {
+float ScreenAddons::GetScreenMult(bool h) {
 	return ms_fScreenMultiplier[h];
 };
 
-void ScreenAddition::SetScreenMult(float w, float h) {
+void ScreenAddons::SetScreenMult(float w, float h) {
 	ms_fScreenMultiplier[0] = w;
 	ms_fScreenMultiplier[1] = h;
 };

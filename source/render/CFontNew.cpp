@@ -1,13 +1,19 @@
 #include "plugin.h"
-#include "CTxdStore.h"
+#include "ClassicHud.h"
 #include "CFontNew.h"
 #include "CHudNew.h"
 #include "Settings.h"
 
+#if GTASA
+#include "CTxdStore.h"
+#endif
+
 using namespace plugin;
+
+CFontNew cfontnew;
 bool CFontNew::ms_bFontsLoaded;
 
-int III_Size[2][13 * 16] = {
+int III_Size[2][16 * 13] = {
 	{ // font2
 	13, 12, 31, 35, 23, 35, 31,  9, 14, 15, 25, 30, 11, 17, 13, 31,
 	23, 16, 22, 21, 24, 23, 23, 20, 23, 22, 10, 35, 26, 26, 26, 26,
@@ -41,16 +47,16 @@ int III_Size[2][13 * 16] = {
 	}
 };
 
-int VC_Size[2][13 * 16] = {
+int VC_Size[2][16 * 13] = {
 	{ // font2
-	12, 13, 13, 28, 28, 28, 28,  8, 17, 17, 30, 28, 28, 12,  9, 21,
-	28, 14, 28, 28, 28, 28, 28, 28, 28, 28, 13, 13, 30, 30, 30, 30,
-	10, 25, 23, 21, 24, 22, 20, 24, 24, 17, 20, 22, 20, 30, 27, 27,
-	26, 26, 24, 23, 24, 31, 23, 31, 24, 23, 21, 28, 33, 33, 14, 28,
-	10, 11, 12,  9, 11, 10, 10, 12, 12,  7,  7, 13,  5, 18, 12, 10,
-	12, 11, 10, 12,  8, 13, 13, 18, 17, 13, 12, 30, 30, 37, 35, 37,
-	25, 25, 25, 25, 33, 21, 24, 24, 24, 24, 17, 17, 17, 17, 27, 27,
-	27, 27, 31, 31, 31, 31, 11, 11, 11, 11, 11, 20,  9, 10, 10, 10,
+	12, 13, 13, 28, 28, 28, 28,  8, 17, 17, 30, 28, 28, 12,  9, 21, // 
+	16,  8, 16, 14, 14, 14, 14, 14, 14, 14, 13, 13, 30, 30, 30, 30, // 0
+	10, 16, 18, 12, 16, 20, 16, 16, 20, 16, 18, 20, 18, 28, 24, 24, // - A
+	18, 18, 18, 18, 24, 31, 16, 22, 22, 22, 20, 24, 28, 28, 14, 24, // P
+	10, 11, 10,  9, 11,  8, 10, 12, 12,  7,  7, 13,  5, 18, 12, 12, // - a
+	16, 11, 10,  8,  8, 13, 13, 18, 17, 13, 12, 30, 30, 37, 35, 37, // p
+	24, 25, 25, 25, 33, 21, 24, 24, 24, 24, 17, 17, 17, 17, 27, 27, // 
+	26, 26, 31, 31, 31, 31, 11, 11, 11, 11, 11, 20,  9, 10, 10, 10, //
 	10,  7,  7,  7,  7, 10, 10, 10, 10, 13, 13, 13, 13, 27, 12, 30,
 	27, 16, 27, 27, 27, 27, 27, 27, 27, 27, 18, 29, 26, 25, 28, 26,
 	25, 27, 28, 12, 24, 25, 24, 30, 27, 29, 26, 26, 25, 26, 25, 26,
@@ -75,7 +81,7 @@ int VC_Size[2][13 * 16] = {
 	}
 };
 
-int SA_Size[2][13 * 16] = {
+int SA_Size[2][16 * 13] = {
 	{ // font2
 	12, 13, 13, 28, 28, 28, 28,  8, 17, 17, 30, 28, 28, 12,  9, 21,
 	28, 14, 28, 28, 28, 28, 28, 28, 28, 28, 13, 13, 30, 30, 30, 30,
@@ -109,6 +115,12 @@ int SA_Size[2][13 * 16] = {
 	}
 };
 
+CFontNew::CFontNew() {
+#if GTASA
+	patch::RedirectJump(0x719490, CFontNew::SetFontStyle);
+#endif
+}
+
 void CFontNew::Initialise() {
 	if (!ms_bFontsLoaded) {
 		int Slot = CTxdStore::AddTxdSlot("fonts_new");
@@ -123,7 +135,7 @@ void CFontNew::Initialise() {
 		CTxdStore::PopCurrentTxd();
 
 		for (int i = 0; i < 208; i++) {
-			if (CHudNew::GetGameMode() == GAMEMODE_III) {
+			if (ClassicHud::GetGameMode() == GAMEMODE_III) {
 #if GTASA
 				gFontData[0].m_propValues[i] = III_Size[0][i];
 				gFontData[1].m_propValues[i] = III_Size[1][i];
@@ -131,7 +143,7 @@ void CFontNew::Initialise() {
 				gFontData[1].m_unpropValue = III_Size[1][192];
 #endif
 			}
-			else if (CHudNew::GetGameMode() == GAMEMODE_VC) {
+			else if (ClassicHud::GetGameMode() == GAMEMODE_VC) {
 #if GTASA
 				gFontData[0].m_propValues[i] = VC_Size[0][i];
 				gFontData[1].m_propValues[i] = VC_Size[1][i];
@@ -139,7 +151,7 @@ void CFontNew::Initialise() {
 				gFontData[1].m_unpropValue = VC_Size[1][207];
 #endif
 			}
-			else if (CHudNew::GetGameMode() == GAMEMODE_SA) {
+			else if (ClassicHud::GetGameMode() == GAMEMODE_SA) {
 #if GTASA
 				gFontData[0].m_propValues[i] = SA_Size[0][i];
 				gFontData[1].m_propValues[i] = SA_Size[1][i];
@@ -147,13 +159,13 @@ void CFontNew::Initialise() {
 				gFontData[1].m_unpropValue = 20;
 #endif
 			}
-			else if (CHudNew::GetGameMode() == GAMEMODE_LCS) {
+			else if (ClassicHud::GetGameMode() == GAMEMODE_LCS) {
 
 			}
-			else if (CHudNew::GetGameMode() == GAMEMODE_VCS) {
+			else if (ClassicHud::GetGameMode() == GAMEMODE_VCS) {
 
 			}
-			else if (CHudNew::GetGameMode() == GAMEMODE_ADVANCE) {
+			else if (ClassicHud::GetGameMode() == GAMEMODE_ADVANCE) {
 
 			}
 		}
@@ -176,14 +188,14 @@ void CFontNew::Shutdown() {
 
 void CFontNew::SetFontStyle(int Font) {
 #if GTASA
-	if (CHudNew::GetGameMode() == GAMEMODE_III) {
+	if (ClassicHud::GetGameMode() == GAMEMODE_III) {
 		if (Font > III_FONT_PRICEDOWN)
 			Font = III_FONT_PRICEDOWN;
 
 		CFont::m_FontTextureId = Font;
 		CFont::m_FontStyle = 0;
 	}
-	else if (CHudNew::GetGameMode() == GAMEMODE_VC) {
+	else if (ClassicHud::GetGameMode() == GAMEMODE_VC) {
 		if (Font >= VC_FONT_PRICEDOWN) {
 			CFont::m_FontTextureId = 1;
 			CFont::m_FontStyle = 1;
@@ -193,7 +205,7 @@ void CFontNew::SetFontStyle(int Font) {
 			CFont::m_FontStyle = 0;
 		}
 	}
-	else if (CHudNew::GetGameMode() == GAMEMODE_SA) {
+	else if (ClassicHud::GetGameMode() == GAMEMODE_SA) {
 		if (Font == 2) {
 			CFont::m_FontTextureId = 0;
 			CFont::m_FontStyle = 2;
@@ -207,23 +219,14 @@ void CFontNew::SetFontStyle(int Font) {
 			CFont::m_FontStyle = 0;
 		}
 	}
-	else if (CHudNew::GetGameMode() == GAMEMODE_LCS) {
+	else if (ClassicHud::GetGameMode() == GAMEMODE_LCS) {
 
 	}
-	else if (CHudNew::GetGameMode() == GAMEMODE_VCS) {
+	else if (ClassicHud::GetGameMode() == GAMEMODE_VCS) {
 
 	}
-	else if (CHudNew::GetGameMode() == GAMEMODE_ADVANCE) {
+	else if (ClassicHud::GetGameMode() == GAMEMODE_ADVANCE) {
 
 	}
-#endif
-}
-
-void CFontNew::InjectPatches() {
-	Events::initRwEvent += Initialise;
-	Events::shutdownRwEvent += Shutdown;
-
-#if GTASA
-	patch::RedirectJump(0x719490, CFontNew::SetFontStyle);
 #endif
 }

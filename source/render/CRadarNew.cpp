@@ -1,21 +1,26 @@
 #include "plugin.h"
-#include "CHud.h"
-#include "CRadar.h"
-#include "CMenuManager.h"
-#include "CTxdStore.h"
+#include "ClassicHud.h"
 #include "CHudNew.h"
+#include "CFontNew.h"
 #include "CRadarNew.h"
-#include "Settings.h"
-#include "ScreenAddition.h"
-#include "CEntryExitManager.h"
-#include "CTimer.h"
+#include "ScreenAddons.h"
+
+#if GTASA
 #include "CCamera.h"
+#include "CHud.h"
+#include "CMenuManager.h"
+#include "CEntryExitManager.h"
+#include "CRadar.h"
 #include "CReplay.h"
+#include "CTimer.h"
+#include "CTxdStore.h"
+#endif
 
 using namespace plugin;
 
+CRadarNew cradarnew;
 CSprite2d CRadarNew::RadarSprites[RADAR_TOTALSPRITES];
-CSprite2d CRadarNew::BlipsSprites[300];
+CSprite2d CRadarNew::BlipsSprites[MAX_BLIPS];
 bool CRadarNew::ms_bSpritesLoaded;
 
 char *radarSpriteList[] = {
@@ -24,6 +29,14 @@ char *radarSpriteList[] = {
 	"radarringback",
 	"radarringmask"
 };
+
+CRadarNew::CRadarNew() {
+#if GTASA
+	patch::RedirectJump(0x585FF0, CRadarNew::DrawRadarSprite);
+	patch::RedirectJump(0x583480, CRadarNew::TransformRadarPointToScreenSpace);
+	patch::Set(0x588722, 5); // CRadar::DrawRotatingRadarSprite[RADAR_SPRITE_CENTRE];
+#endif
+}
 
 void CRadarNew::Initialise() {
 	s.readBlipsDat();
@@ -86,7 +99,7 @@ void CRadarNew::DrawRadar() {
 					RwRenderStateSet(rwRENDERSTATESHADEMODE, (void*)rwSHADEMODEFLAT);
 					RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERLINEAR);
 
-					ScreenAddition::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
+					ScreenAddons::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
 					CRadar::DrawMap();
 
 					// Radar disc
@@ -94,7 +107,7 @@ void CRadarNew::DrawRadar() {
 
 					// Draw blips
 					CRadar::DrawBlips();
-					ScreenAddition::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
+					ScreenAddons::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
 
 					// Radar centre
 					CVector2D out;
@@ -103,7 +116,7 @@ void CRadarNew::DrawRadar() {
 					float angle = FindPlayerHeading(0) - (CRadar::m_fRadarOrientation + M_PI);
 					CRadar::DrawRotatingRadarSprite(&BlipsSprites[2], out.x, out.y, angle, SCREEN_LEFT(8.0f), SCREEN_TOP(7.6f), CRGBA(255, 255, 255, 255));
 				
-					ScreenAddition::SetScreenMult(DEFAULT_HUD_SCALE);
+					ScreenAddons::SetScreenMult(DEFAULT_HUD_SCALE);
 				}
 			}
 		}
@@ -119,11 +132,13 @@ void CRadarNew::DrawRadarSprite(unsigned char iconID, float x, float y, unsigned
 	}
 
 	if (CRadar::DisplayThisBlip(iconID, -99)) {
-		float w = 7.6f;
-		float h = 7.6f;
+		ScreenAddons::SetScreenMult(DEFAULT_HUD_SCALE);
+		float w = 7.0f;
+		float h = 7.0f;
 		if (ms_bSpritesLoaded)
 			BlipsSprites[iconID].Draw(CRect(x - SCREEN_LEFT(w), y - SCREEN_TOP(h), x + SCREEN_LEFT(w), y + SCREEN_TOP(h)), CRGBA(255, 255, 255, alpha));	
 		CRadar::AddBlipToLegendList(0, iconID);
+		ScreenAddons::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
 	}
 #endif
 }
@@ -141,18 +156,5 @@ void CRadarNew::TransformRadarPointToScreenSpace(CVector2D &out, CVector2D &in) 
 		out.y = (1.0f - in.y) * 0.5f * SCREEN_TOP(s.m_fRadarMap.bottom) + SCREEN_BOTTOM(s.m_fRadarMap.top + s.m_fRadarMap.bottom);
 	}
 	__asm pop edx
-#endif
-}
-
-void CRadarNew::InjectPatches() {
-	Events::initRwEvent += CRadarNew::Initialise;
-	Events::shutdownRwEvent += CRadarNew::Shutdown;
-	Events::drawHudEvent += CRadarNew::DrawRadar;
-
-#if GTASA
-	patch::RedirectJump(0x585FF0, CRadarNew::DrawRadarSprite);
-	patch::RedirectJump(0x583480, CRadarNew::TransformRadarPointToScreenSpace);
-	patch::Set(0x58FC53, 5); // CRadar::DrawRadar
-	patch::Set(0x588722, 5); // CRadar::DrawRotatingRadarSprite[RADAR_SPRITE_CENTRE];
 #endif
 }

@@ -6,7 +6,9 @@
 #define READ_RECT(set, a, b, c) a = set[b].asRect(c)
 #define READ_RGBA(set, a, b, c) a = set[b].asRGBA(c)
 
-#include "CRadarNew.h"
+#define MAX_BLIPS 300
+
+#include "ClassicHud.h"
 
 class Settings {
 public:
@@ -14,6 +16,7 @@ public:
 	std::string m_nGameMode, m_nGameModeTemp;
 	float m_fHudW, m_fHudH;
 	float m_fRadarW, m_fRadarH;
+	float m_fSubsW, m_fSubsH;
  
 	CRect m_fClock, m_fClockTemp;
 	CRect m_fMoney, m_fMoneyTemp;
@@ -27,8 +30,11 @@ public:
 	CRect m_fVehicleName, m_fVehicleNameTemp;
 	CRect m_fRadioName, m_fRadioNameTemp;
 	CRect m_fTextBox, m_fTextBoxTemp;
+	CRect m_fSubtitles, m_fSubtitlesTemp;
+
 	CRect m_fRadarMap, m_fRadarMapTemp;
 	CRect m_fRadarSprites, m_fRadarSpritesTemp;
+
 
 	CRGBA HUD_COLOR_CLOCK, HUD_COLOR_CLOCK_TEMP;
 	CRGBA HUD_COLOR_CASH, HUD_COLOR_CASH_TEMP;
@@ -53,7 +59,7 @@ public:
 	static char *SetFileWithPrefix(char *folder, char *file) {
 		static char FileName[128];
 		strcpy_s(FileName, folder);
-		strcat_s(FileName, CHudNew::GetGamePrefix());
+		strcat_s(FileName, ClassicHud::GetGamePrefix());
 		strcat_s(FileName, "_");
 		strcat_s(FileName, file);
 		puts(FileName);
@@ -66,13 +72,6 @@ public:
 		strcat_s(FileName, file);
 		puts(FileName);
 		return FileName;
-	}
-
-	inline void Multiply(CRect &src, float x, float y) {
-		src.left = src.left * x;
-		src.right = src.right * x;
-		src.top = src.top * y;
-		src.bottom = src.bottom * y;
 	}
 };
 
