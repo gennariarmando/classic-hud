@@ -55,6 +55,10 @@ ClassicHud::ClassicHud() {
 		CHudNew::Draw();
 	};
 
+	Events::drawAfterFadeEvent += [] {
+		CHudNew::DrawAfterFade();
+	};
+
 	// Shutdown.
 	Events::shutdownRwEvent += [] {
 		CFontNew::Shutdown();

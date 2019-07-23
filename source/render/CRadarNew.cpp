@@ -31,6 +31,11 @@ char *radarSpriteList[] = {
 };
 
 CRadarNew::CRadarNew() {
+	s.readIni();
+
+	if (!s.m_bEnable)
+		return;
+
 #if GTASA
 	patch::RedirectJump(0x585FF0, CRadarNew::DrawRadarSprite);
 	patch::RedirectJump(0x583480, CRadarNew::TransformRadarPointToScreenSpace);
@@ -133,8 +138,8 @@ void CRadarNew::DrawRadarSprite(unsigned char iconID, float x, float y, unsigned
 
 	if (CRadar::DisplayThisBlip(iconID, -99)) {
 		ScreenAddons::SetScreenMult(DEFAULT_HUD_SCALE);
-		float w = 7.0f;
-		float h = 7.0f;
+		float w = 6.5f;
+		float h = 6.5f;
 		if (ms_bSpritesLoaded)
 			BlipsSprites[iconID].Draw(CRect(x - SCREEN_LEFT(w), y - SCREEN_TOP(h), x + SCREEN_LEFT(w), y + SCREEN_TOP(h)), CRGBA(255, 255, 255, alpha));	
 		CRadar::AddBlipToLegendList(0, iconID);

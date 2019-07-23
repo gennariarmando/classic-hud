@@ -19,7 +19,10 @@ HUD_ZONE_NAME               32.0   28.0     1.2    1.9
 HUD_VEHICLE_NAME            32.0  104.0     1.0    1.5
 HUD_RADIO_NAME               0.0   22.0     0.6    0.9
 HUD_HELP_TEXT               26.0   28.0    0.52    1.1
-HUD_SUBTITLES                0.0  64.0    0.48    1.12
+HUD_SUBTITLES               40.0  130.0    0.58    1.2
+HUD_WB_MESSAGE               0.0   80.0    2.2     2.2
+HUD_MISSION_RESULT           0.0   20.0    1.6     1.8
+HUD_MISSION_TITLE           20.0  115.0    1.0     1.3
 
-HUD_RADAR_MAP               40.0   28.0    94.0   76.0
-HUD_RADAR_SPRITES           36.0   24.0   138.0  108.0
+HUD_RADAR_MAP               40.0   28.0   94.0    76.0
+HUD_RADAR_SPRITES           36.0   24.0  138.0   108.0

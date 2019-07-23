@@ -12,6 +12,8 @@ void Settings::readIni() {
 
 	READ_BOOL(ini, m_bEnable, "m_bEnable", true);
 	READ_STR(ini, m_nGameMode, "m_nGameMode", "SA");
+	READ_BOOL(ini, bMinimalMoneyCounter, "bMinimalMoneyCounter", false);
+
 	READ_FLOAT(ini, m_fHudW, "m_fHudWidthScale", 1.0f);
 	READ_FLOAT(ini, m_fHudH, "m_fHudHeightScale", 1.0f);
 	READ_FLOAT(ini, m_fRadarW, "m_fRadarWidthScale", 1.0f);
@@ -38,6 +40,9 @@ void Settings::readDat() {
 	READ_RECT(hud, m_fRadioName, "HUD_RADIO_NAME", rect);
 	READ_RECT(hud, m_fTextBox, "HUD_HELP_TEXT", rect);
 	READ_RECT(hud, m_fSubtitles, "HUD_SUBTITLES", rect);
+	READ_RECT(hud, m_fWastedBustedText, "HUD_WB_MESSAGE", rect);
+	READ_RECT(hud, m_fSuccessFailedMessage, "HUD_MISSION_RESULT", rect);
+	READ_RECT(hud, m_fMissionTitle, "HUD_MISSION_TITLE", rect);
 
 	READ_RECT(hud, m_fRadarMap, "HUD_RADAR_MAP", rect);
 	READ_RECT(hud, m_fRadarSprites, "HUD_RADAR_SPRITES", rect);
@@ -46,19 +51,29 @@ void Settings::readDat() {
 	config_file hudColor(PLUGIN_PATH(SetFileWithPrefix("classichud\\data\\", "hudColor.dat")));
 
 	CRGBA rgba = CRGBA(0, 0, 0, 255);
-	READ_RGBA(hudColor, HUD_COLOR_CLOCK, "HUD_COLOR_CLOCK", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_CASH, "HUD_COLOR_CASH", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_HEALTH, "HUD_COLOR_HEALTH", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_ARMOUR, "HUD_COLOR_ARMOUR", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_BREATH, "HUD_COLOR_BREATH", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_WEAPON_ICON, "HUD_COLOR_WEAPON_ICON", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_AMMO, "HUD_COLOR_AMMO", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_WANTED_N, "HUD_COLOR_WANTED_N", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_WANTED_A, "HUD_COLOR_WANTED_A", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_ZONE_NAME, "HUD_COLOR_ZONE_NAME", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_VEHICLE_NAME, "HUD_COLOR_VEHICLE_NAME", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_RADIO_NAME_N, "HUD_COLOR_RADIO_NAME_N", rgba);
-	READ_RGBA(hudColor, HUD_COLOR_RADIO_NAME_A, "HUD_COLOR_RADIO_NAME_A", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_CLOCK, "HUD_COLOUR_CLOCK", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_CASH, "HUD_COLOUR_CASH", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_HEALTH, "HUD_COLOUR_HEALTH", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_ARMOUR, "HUD_COLOUR_ARMOUR", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_BREATH, "HUD_COLOUR_BREATH", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_WEAPON_ICON, "HUD_COLOUR_WEAPON_ICON", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_AMMO, "HUD_COLOUR_AMMO", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_WANTED_N, "HUD_COLOUR_WANTED_N", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_WANTED_A, "HUD_COLOUR_WANTED_A", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_ZONE_NAME, "HUD_COLOUR_ZONE_NAME", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_VEHICLE_NAME, "HUD_COLOUR_VEHICLE_NAME", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_RADIO_NAME_N, "HUD_COLOUR_RADIO_NAME_N", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_RADIO_NAME_A, "HUD_COLOUR_RADIO_NAME_A", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_RADIO_NAME_A, "HUD_COLOUR_RADIO_NAME_A", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_RADIO_NAME_A, "HUD_COLOUR_RADIO_NAME_A", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_HELP_TEXT, "HUD_COLOUR_HELP_TEXT", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_HELP_BOX, "HUD_COLOUR_HELP_BOX", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_SUBTITLES, "HUD_COLOUR_SUBTITLES", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_WASTED, "HUD_COLOUR_WASTED", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_BUSTED, "HUD_COLOUR_BUSTED", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_MISSION_RESULT, "HUD_COLOUR_MISSION_RESULT", rgba);
+	READ_RGBA(hudColor, HUD_COLOUR_MISSION_TITLE, "HUD_COLOUR_MISSION_TITLE", rgba);
+
 }
 
 void Settings::readBlipsDat() {

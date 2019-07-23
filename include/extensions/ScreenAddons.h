@@ -7,7 +7,8 @@
 #define SCREEN_TOP(a) (((a) * SCREEN_HEIGHT / 480.0f) * ScreenAddons::GetScreenMult(1))
 #define SCREEN_RIGHT(a) (SCREEN_WIDTH - SCREEN_LEFT(a))
 #define SCREEN_BOTTOM(a) (SCREEN_HEIGHT - SCREEN_TOP(a))
-#define SCREEN_CENTER(a) ((SCREEN_WIDTH * 0.5f) + SCREEN_LEFT(a))
+#define SCREEN_MIDDLE_X(a) ((SCREEN_WIDTH * 0.5f) + SCREEN_LEFT(a))
+#define SCREEN_MIDDLE_Y(a) ((SCREEN_HEIGHT * 0.5f) + SCREEN_TOP(a))
 
 class ScreenAddons {
 public:

@@ -1,9 +1,10 @@
 #pragma once
 #define BLANK NULL
-#define III_VC_SHADOW_SIZE (2 * s.m_fHudW)
-#define SA_EDGE_SIZE (2)
-#define AREA_NAME_TIME 10000
-#define VEHICLE_NAME_TIME 10000
+#define HUD_SHADOW_SIZE (2)
+#define SUBS_SHADOW_SIZE (2)
+#define EDGE_SIZE (2)
+#define AREA_NAME_TIME 3000
+#define VEHICLE_NAME_TIME 3000
 
 #include "CSprite2d.h"
 
@@ -30,6 +31,9 @@ public:
 	static void Initialise();
 	static void Shutdown();
 	static void Draw();
+	static void DrawAfterFade();
+
+private:
 	static void DrawClock(float x, float y, float w, float h);
 	static void DrawMoneyCounter(float x, float y, float w, float h);
 	static void DrawHealth(int PlayerID, float x, float y, float w, float h);
@@ -42,7 +46,15 @@ public:
 	static void DrawAreaName(float x, float y, float w, float h);
 	static void DrawVehicleName(float x, float y, float w, float h);
 	static void DrawRadioStation(float x, float y, float w, float h);
+	static void PrintHelpText(float x, float y, char * str, float alpha);
 	static void DrawHelpText(float x, float y, float w, float h);
 	static void DrawSubtitles(float x, float y, float w, float h);
+	static void DrawWastedBustedMessage(float x, float y, float w, float h);
+	static void DrawMissionTitle(float x, float y, float w, float h);
+	static void DrawSuccessFailedMessage(float x, float y, float w, float h);
+	static void DrawOddJobMessage(float x, float y, float w, float h);
+
+public:
 	static void DrawProgressBar(float x, float y, float width, float height, float progress, char border, char shadow, CRGBA colorFront, CRGBA colorBack);
+	static void DrawProgressBarWithProgressDelta(float x, float y, float width, float height, float progress, CRGBA const & color, float deltaProgress, CRGBA const & deltaColor);
 };
