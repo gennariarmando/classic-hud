@@ -108,27 +108,26 @@ void CRadarNew::DrawRadar() {
 					CRadar::DrawMap();
 
 					// Radar disc
-					RadarSprites[RADAR_DISC].Draw(CRect(SCREEN_LEFT(s.m_fRadarSprites.left), SCREEN_BOTTOM(s.m_fRadarSprites.top), SCREEN_LEFT(s.m_fRadarSprites.right), SCREEN_BOTTOM(s.m_fRadarSprites.bottom)), CRGBA(255, 255, 255, 255));
+					RadarSprites[RADAR_DISC].Draw(CRect(SCREEN_LEFT(s.m_fRadarSprites.left), SCREEN_BOTTOM(s.m_fRadarSprites.top), SCREEN_LEFT(s.m_fRadarSprites.right), SCREEN_BOTTOM(s.m_fRadarSprites.top + s.m_fRadarSprites.bottom)), CRGBA(255, 255, 255, 255));
 
 					// Draw blips
 					CRadar::DrawBlips();
-					ScreenAddons::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
 
 					// Radar centre
 					CVector2D out;
 					CVector2D in = CVector2D(0.0f, 0.0f);
 					TransformRadarPointToScreenSpace(out, in);
 					float angle = FindPlayerHeading(0) - (CRadar::m_fRadarOrientation + M_PI);
-					CRadar::DrawRotatingRadarSprite(&BlipsSprites[2], out.x, out.y, angle, SCREEN_LEFT(8.0f), SCREEN_TOP(7.6f), CRGBA(255, 255, 255, 255));
-				
 					ScreenAddons::SetScreenMult(DEFAULT_HUD_SCALE);
-				}
+					CRadar::DrawRotatingRadarSprite(&BlipsSprites[2], out.x, out.y, angle, SCREEN_LEFT(7.6f), SCREEN_TOP(7.6f), CRGBA(255, 255, 255, 255));
+								}
 			}
 		}
 	}
 }
 
 void CRadarNew::DrawRadarSprite(unsigned char iconID, float x, float y, unsigned int alpha) {
+	ScreenAddons::SetScreenMult(DEFAULT_HUD_SCALE);
 #if GTASA
 	if (FrontEndMenuManager.drawRadarOrMap) {
 		x = SCREEN_WIDTH * (1.0f / 640.0f) * x;
@@ -138,14 +137,15 @@ void CRadarNew::DrawRadarSprite(unsigned char iconID, float x, float y, unsigned
 
 	if (CRadar::DisplayThisBlip(iconID, -99)) {
 		ScreenAddons::SetScreenMult(DEFAULT_HUD_SCALE);
-		float w = 6.5f;
-		float h = 6.5f;
+		float w = 7.0f;
+		float h = 7.0f;
 		if (ms_bSpritesLoaded)
 			BlipsSprites[iconID].Draw(CRect(x - SCREEN_LEFT(w), y - SCREEN_TOP(h), x + SCREEN_LEFT(w), y + SCREEN_TOP(h)), CRGBA(255, 255, 255, alpha));	
 		CRadar::AddBlipToLegendList(0, iconID);
 		ScreenAddons::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
 	}
 #endif
+	ScreenAddons::SetScreenMult(s.m_fRadarW, s.m_fRadarH);
 }
 
 void CRadarNew::TransformRadarPointToScreenSpace(CVector2D &out, CVector2D &in) {

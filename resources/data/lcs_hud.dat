@@ -1,0 +1,28 @@
+#
+# ClassicHud
+# This file contains initial display settings for each HUD component.
+# Please ensure you change the correct values, wrong values will make the modification working improperly.
+#
+
+# ----------------------------------------------------------------------------------------------------------
+# -HUD ITEM NAME-           -POSITION-       -SIZE-		
+# ----------------------------------------------------------------------------------------------------------
+HUD_CLOCK                  155.05  28.0     1.0    0.9
+HUD_CASH                   155.05  91.0     0.99   0.9
+HUD_HEALTH                 174.51  70.2    80.0   18.0
+HUD_ARMOUR                 174.51  49.2    80.0   18.0
+HUD_BREATH                 174.51  50.2    80.0   18.0
+HUD_WEAPON_ICON             96.0   26.5    34.0   90.0
+HUD_AMMO                    64.5   74.0     0.3    0.7
+HUD_WANTED                  56.0  110.0     1.0    1.0
+HUD_ZONE_NAME               38.0   28.0     0.8    1.65
+HUD_VEHICLE_NAME            38.0   62.5     0.8    1.65
+HUD_RADIO_NAME               0.0   22.0     0.8    1.35
+HUD_HELP_TEXT               26.0   28.0    0.52    1.1
+HUD_SUBTITLES                0.0   64.0    0.58    1.2
+HUD_WB_MESSAGE               0.0   80.0    1.4     2.2
+HUD_MISSION_RESULT           0.0   20.0    1.4     2.2
+HUD_MISSION_TITLE           20.0  115.0    1.0     1.3
+
+HUD_RADAR_MAP               37.5   25.5  114.0   91.0
+HUD_RADAR_SPRITES           33.5   21.5  158.0   99.0

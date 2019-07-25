@@ -2,6 +2,8 @@
 #include "ClassicHud.h"
 #include "CFontNew.h"
 #include "CHudNew.h"
+#include "CHudNumbers.h"
+#include "CProgressBar.h"
 #include "CRadarNew.h"
 #include "Settings.h"
 
@@ -44,6 +46,8 @@ ClassicHud::ClassicHud() {
 	Events::initRwEvent += [] {
 		CFontNew::Initialise();
 		CHudNew::Initialise();
+		CHudNumbers::Initialise();
+		CProgressBar::Initialise();
 		CRadarNew::Initialise();
 	};
 
@@ -63,6 +67,8 @@ ClassicHud::ClassicHud() {
 	Events::shutdownRwEvent += [] {
 		CFontNew::Shutdown();
 		CHudNew::Shutdown();
+		CHudNumbers::Shutdown();
+		CProgressBar::Shutdown();
 		CRadarNew::Shutdown();
 	};
 
@@ -74,11 +80,17 @@ void ClassicHud::ReInitialise() {
 		s.readIni();
 		ClassicHud::ClassicHud();
 
+		CFontNew::Shutdown();
+		CFontNew::Initialise();
+
 		CHudNew::Shutdown();
 		CHudNew::Initialise();
 
-		CFontNew::Shutdown();
-		CFontNew::Initialise();
+		CHudNumbers::Shutdown();
+		CHudNumbers::Initialise();
+
+		CProgressBar::Shutdown();
+		CProgressBar::Initialise();
 
 		CRadarNew::Shutdown();
 		CRadarNew::Initialise();

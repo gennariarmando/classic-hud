@@ -53,8 +53,4 @@ private:
 	static void DrawMissionTitle(float x, float y, float w, float h);
 	static void DrawSuccessFailedMessage(float x, float y, float w, float h);
 	static void DrawOddJobMessage(float x, float y, float w, float h);
-
-public:
-	static void DrawProgressBar(float x, float y, float width, float height, float progress, char border, char shadow, CRGBA colorFront, CRGBA colorBack);
-	static void DrawProgressBarWithProgressDelta(float x, float y, float width, float height, float progress, CRGBA const & color, float deltaProgress, CRGBA const & deltaColor);
 };
