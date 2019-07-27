@@ -15,14 +15,14 @@ HUD_BREATH                 174.51  49.2    80.0   18.0
 HUD_WEAPON_ICON             96.0   26.5    34.0   90.0
 HUD_AMMO                    64.5   74.0     0.3    0.7
 HUD_WANTED                  56.0  110.0     1.0    1.0
-HUD_ZONE_NAME               38.0   28.0     0.8    1.65
-HUD_VEHICLE_NAME            38.0   62.5     0.8    1.65
-HUD_RADIO_NAME               0.0   22.0     0.8    1.35
+HUD_ZONE_NAME               38.0   28.0     1.4    2.4
+HUD_VEHICLE_NAME            38.0   62.5     1.4    2.4
+HUD_RADIO_NAME               0.0   22.0     1.0    2.0
 HUD_HELP_TEXT               26.0   28.0    0.52    1.1
 HUD_SUBTITLES                0.0   64.0    0.58    1.2
 HUD_WB_MESSAGE               0.0   80.0    1.4     2.2
 HUD_MISSION_RESULT           0.0   20.0    1.4     2.2
-HUD_MISSION_TITLE           20.0  115.0    1.0     1.3
+HUD_MISSION_TITLE           20.0   28.0    1.4     2.4
 
 HUD_RADAR_MAP               40.0   28.0   94.0    76.0
 HUD_RADAR_SPRITES           36.0   24.0  138.0    84.0

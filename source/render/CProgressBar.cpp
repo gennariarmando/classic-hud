@@ -3,6 +3,7 @@
 #include "CSprite2d.h"
 #include "CTxdStore.h"
 #include "Settings.h"
+#include "ScreenAddons.h"
 
 bool CProgressBar::ms_bSpritesLoaded;
 CSprite2d CProgressBar::Sprites[PROGRESS_TOTALSPRITES];
@@ -87,13 +88,17 @@ void CProgressBar::DrawProgressBarWithProgressDelta(float x, float y, float widt
 }
 
 void CProgressBar::DrawProgressBarWithSprites(float x, float y, float width, float height, float progress, CRGBA color) {
+	float _x(x), _w(width);
+
+	_x += SCREEN_LEFT(1.0f);
+	_w += SCREEN_LEFT(-2.0f);
 	if (progress >= 1.0f)
 		progress = 1.0f;
 	else
-		Sprites[BAR_INSIDE].Draw(CRect((x + width * (progress)), (y), (x + width), (y + height)), CRGBA(color.r * 0.50, color.g * 0.50, color.b * 0.50, color.a), progress, 1.0f, 1.0f, 1.0f, progress, 0.0f, 1.0f, 0.0f);
+		Sprites[BAR_INSIDE].Draw(CRect((_x + _w * (progress)), (y), (_x + _w), (y + height)), CRGBA(color.r * 0.50, color.g * 0.50, color.b * 0.50, color.a), progress, 1.0f, 1.0f, 1.0f, progress, 0.0f, 1.0f, 0.0f);
 
 	if (progress > 0.0f)
-		Sprites[BAR_INSIDE].Draw(CRect((x), (y), (x + width * (progress)), (y + height)), CRGBA(color.r, color.g, color.b, color.a), 0.0f, 1.0f, progress, 1.0f, 0.0f, 0.0f, progress, 0.0f);
+		Sprites[BAR_INSIDE].Draw(CRect((_x), (y), (_x + _w * (progress)), (y + height)), CRGBA(color.r, color.g, color.b, color.a), 0.0f, 1.0f, progress, 1.0f, 0.0f, 0.0f, progress, 0.0f);
 
 	Sprites[BAR_OUTLINE].Draw(CRect((x), (y), (x + width), (y + height)), CRGBA(0, 0, 0, color.a));
 }
