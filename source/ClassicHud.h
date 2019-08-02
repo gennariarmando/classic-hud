@@ -1,4 +1,6 @@
 #pragma once
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 enum eGameMode {
 	GAMEMODE_NULL,
@@ -7,7 +9,8 @@ enum eGameMode {
 	GAMEMODE_SA,
 	GAMEMODE_LCS,
 	GAMEMODE_VCS,
-	GAMEMODE_ADVANCE,
+	GAMEMODE_IV,
+	GAMEMODE_UG,
 	GAMEMODE_TOTALMODES
 };
 
@@ -20,8 +23,8 @@ public:
 public:
 	ClassicHud();
 
+	static void InitGameMode(std::string gameMode, bool reInit = false);
 	static void ReInitialise();
-
 	static eGameMode GetGameMode() { return ms_nGameMode; }
 	static void SetGameMode(eGameMode Mode) { ms_nGameMode = Mode; }
 	static char *GetGamePrefix() { return ms_nGamePrefix; }

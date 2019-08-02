@@ -27,6 +27,7 @@ workspace "ClassicHud"
     disablewarnings { "4073", "4221", "4244" }
 
 	files { 
+	"include/debugmenu/*.*",
 	"include/extensions/*.*",
 	"source/*.*",
 	"source/render/*.*",
@@ -34,6 +35,8 @@ workspace "ClassicHud"
 	}
 
 	includedirs { 
+	"include/",
+	"include/debugmenu/",
 	"include/extensions/",
 	"$(PLUGIN_SDK_DIR)/shared/",
 	"$(PLUGIN_SDK_DIR)/shared/game/",

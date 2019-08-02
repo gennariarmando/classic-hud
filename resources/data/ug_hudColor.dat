@@ -1,0 +1,45 @@
+#
+# ClassicHud
+# This file contains RGB colour values for each HUD component.
+# Please ensure you change the correct values, wrong values will make the modification working improperly.
+#
+
+# -------------------------------------------------
+# -HUD COLOUR NAME-		     -R- -G- -B- -A-
+# -------------------------------------------------
+HUD_COLOUR_RED                255  38  41 255
+HUD_COLOUR_GREEN               82 157  67 255
+HUD_COLOUR_BLUEDARK            50  60 127 255
+HUD_COLOUR_BLUELIGHT          172 203 241 255
+HUD_COLOUR_WHITE              255 255 255 255
+HUD_COLOUR_BLACK                0   0   0 255
+HUD_COLOUR_ORANGE             215 146  24 255
+HUD_COLOUR_PURPLE             168 110 252 255
+HUD_COLOUR_GREY               150 150 150 255
+HUD_COLOUR_REDDARK            104  15  17 255
+HUD_COLOUR_GREENDARK           38  71  31 255
+HUD_COLOUR_ORANGELIGHT        226 192  99 255
+HUD_COLOUR_GREYDARK            74  90 107 255
+HUD_COLOUR_BLUE                20  25 200 255
+HUD_COLOUR_YELLOW             255 255   0 255
+
+HUD_COLOUR_CLOCK              155 155 155 255
+HUD_COLOUR_CASH               255 255 255 255
+HUD_COLOUR_HEALTH             185  38  41 255
+HUD_COLOUR_ARMOUR              85  85  85 255
+HUD_COLOUR_BREATH             172 203 241 255
+HUD_COLOUR_WEAPON_ICON        255 255 255 255
+HUD_COLOUR_AMMO               255 255 255 255
+HUD_COLOUR_WANTED_N             0   0   0 155
+HUD_COLOUR_WANTED_A           215 146  24 255
+HUD_COLOUR_ZONE_NAME          185  38  41 255
+HUD_COLOUR_VEHICLE_NAME       185  38  41 255
+HUD_COLOUR_RADIO_NAME_N       185  38  41 105
+HUD_COLOUR_RADIO_NAME_A       185  38  41 255
+HUD_COLOUR_HELP_TEXT          235 235 235 255
+HUD_COLOUR_HELP_BOX             0   0   0 195
+HUD_COLOUR_SUBTITLES          235 235 235 255
+HUD_COLOUR_WASTED             235 235 235 255
+HUD_COLOUR_BUSTED             235 235 235 255
+HUD_COLOUR_MISSION_RESULT     185  38  41 255
+HUD_COLOUR_MISSION_TITLE      185  38  41 255

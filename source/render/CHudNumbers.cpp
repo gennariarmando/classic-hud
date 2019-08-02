@@ -74,9 +74,14 @@ void CHudNumbers::PrintString(float x, float y, std::string text) {
 
 	Sprite[HUDNUMBERS].SetRenderState();
 
-	for (int i = 0; i < text.length(); i++) {
+	for (unsigned int i = 0; i < text.length(); i++) {
 		float fCharWidth(52), fCharHeight(64), fSpacing(0.25);
 		char chr = text[i] - 48;
+
+		char textFormat[2][13] = {
+			{ '0', '1', '2', '3', '4', '5', '6' , '7', '8', '9', ':', },
+			{ '0', '1', '2', '3', '4', '5', '6' , '7', '8', '9', '$', '*', ' ' },
+		};
 
 		if (m_nFontStyle) {
 			if (text[i] == '$')
@@ -90,7 +95,7 @@ void CHudNumbers::PrintString(float x, float y, std::string text) {
 				if (text[i] == '*') {
 					chr = 22;
 					fCharWidth = 64;
-					m_vecFontScale.x *= 1.2;
+					m_vecFontScale.x *= 1.2f;
 				}
 		}
 

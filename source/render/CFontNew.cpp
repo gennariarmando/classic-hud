@@ -183,6 +183,40 @@ int VCS_Size[2][16 * 13] = {
 	}
 };
 
+int IV_Size[2][16 * 13] = {
+	{ // font2
+	12, 13, 13, 28, 16, 28, 16,  8, 17, 17, 30, 28, 28,  8,  9, 21,
+	28, 14, 28, 28, 28,  0, 28, 28, 28, 28, 13, 13, 30, 30, 30, 30,
+	10, 26, 24, 22, 25, 23, 21, 25, 25, 18, 21, 23, 21, 31, 28, 28,
+	27, 27, 25, 24, 25, 32, 24, 32, 25, 24, 22, 28, 33, 33, 14, 28,
+	10, 12, 13, 10, 12, 11, 11, 13, 13,  8,  8, 14,  6, 19, 13, 11,
+	13, 12, 11, 13,  9, 14, 14, 19, 18, 14, 13, 30, 30, 37, 35, 37,
+	26, 26, 26, 26, 34, 22, 25, 25, 25, 25, 18, 18, 18, 18, 28, 28,
+	28, 28, 32, 32, 32, 32, 12, 12, 12, 12, 12, 21, 10, 11, 11, 11,
+	11,  8,  8,  8,  8, 11, 11, 11, 11, 14, 14, 14, 14, 28, 13, 30,
+	13, 11, 13, 13, 13, 13, 13, 13, 13, 13, 13, 11, 11, 13, 13, 11,
+	13, 13, 15,  8, 15, 15, 12, 16, 13, 12, 13, 13, 13, 13, 11, 15,
+	13, 15, 13, 13, 10, 15, 15, 15, 13, 13, 13, 13, 13, 13, 13, 13,
+	13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+	},
+
+	{ // font1
+	10,  8, 10, 16, 15, 24, 19, 12,  9,  9, 21, 15,  6, 11,  6,  9,
+	18, 10, 16, 17, 16, 16, 17, 15, 16, 17,  7,  7, 13, 14, 13, 15,
+	10, 18, 19, 21, 20, 18, 17, 23, 21,  8, 16, 19, 16, 24, 21, 22,
+	18, 23, 20, 18, 16, 20, 18, 26, 17, 17, 17,  9,  9,  9,  8, 20,
+	 5, 16, 18, 16, 18, 17,  9, 18, 17,  7,  7, 16,  7, 26, 17, 17,
+	18, 18, 10, 15,  9, 17, 14, 21, 14, 15, 14, 19, 11, 19, 13, 13,
+	18, 18, 18, 18, 28, 21, 18, 18, 18, 18,  8,  8,  8,  8, 22, 22,
+	22, 22, 20, 20, 20, 20, 18, 16, 16, 16, 16, 28, 16, 17, 17, 17,
+	17,  7,  7,  7,  7, 17, 17, 17, 17, 17, 17, 17, 17, 21, 17, 15,
+	19, 19, 19, 19, 21, 19, 19, 19, 19, 19, 10, 19, 19, 19, 19, 19,
+	16, 19, 19, 10, 19, 19, 15, 29, 19, 19, 19, 19, 19, 19, 21, 19,
+	20, 32, 19, 19, 19, 19, 19, 19, 19, 29, 19, 19, 19, 19, 19, 10,
+	10,  9,  9, 19, 19, 19, 19, 19, 19, 19, 19, 20, 19, 19, 10, 10,
+	}
+};
+
 CFontNew::CFontNew() {
 	s.readIni();
 
@@ -248,8 +282,21 @@ void CFontNew::Initialise() {
 				gFontData[1].m_unpropValue = 20;
 #endif
 			}
-			else if (ClassicHud::GetGameMode() == GAMEMODE_ADVANCE) {
-
+			else if (ClassicHud::GetGameMode() == GAMEMODE_UG) {
+#if GTASA
+				gFontData[0].m_propValues[i] = SA_Size[0][i];
+				gFontData[1].m_propValues[i] = SA_Size[1][i];
+				gFontData[0].m_unpropValue = 20;
+				gFontData[1].m_unpropValue = 20;
+#endif
+			}
+			else if (ClassicHud::GetGameMode() == GAMEMODE_IV) {
+#if GTASA
+				gFontData[0].m_propValues[i] = IV_Size[0][i];
+				gFontData[1].m_propValues[i] = IV_Size[1][i];
+				gFontData[0].m_unpropValue = 27;
+				gFontData[1].m_unpropValue = 20;
+#endif
 			}
 		}
 
@@ -322,8 +369,33 @@ void CFontNew::SetFontStyle(int Font) {
 			CFont::m_FontStyle = 0;
 		}
 	}
-	else if (ClassicHud::GetGameMode() == GAMEMODE_ADVANCE) {
-
+	else if (ClassicHud::GetGameMode() == GAMEMODE_IV) {
+		if (Font == 2) {
+			CFont::m_FontTextureId = 0;
+			CFont::m_FontStyle = 2;
+		}
+		else if (Font == 3) {
+			CFont::m_FontTextureId = 1;
+			CFont::m_FontStyle = 1;
+		}
+		else {
+			CFont::m_FontTextureId = Font;
+			CFont::m_FontStyle = 0;
+		}
+	}
+	else if (ClassicHud::GetGameMode() == GAMEMODE_UG) {
+		if (Font == 2) {
+			CFont::m_FontTextureId = 0;
+			CFont::m_FontStyle = 2;
+		}
+		else if (Font == 3) {
+			CFont::m_FontTextureId = 1;
+			CFont::m_FontStyle = 1;
+		}
+		else {
+			CFont::m_FontTextureId = Font;
+			CFont::m_FontStyle = 0;
+		}
 	}
 #endif
 }

@@ -1,7 +1,9 @@
-﻿#include "ScreenAddons.h"
+﻿#include "plugin.h"
+#include "ScreenAddons.h"
 #include "CDraw.h"
+#include "Settings.h"
 
-float ScreenAddons::ms_fScreenMultiplier[2];
+CVector2D ScreenAddons::ms_fScreenMultiplier;
 
 float ScreenAddons::GetAspectRatio() {
 #if GTA3
@@ -13,11 +15,11 @@ float ScreenAddons::GetAspectRatio() {
 #endif
 }
 
-float ScreenAddons::GetScreenMult(bool h) {
-	return ms_fScreenMultiplier[h];
+CVector2D ScreenAddons::GetScreenMult() {
+	return ms_fScreenMultiplier;
 };
 
 void ScreenAddons::SetScreenMult(float w, float h) {
-	ms_fScreenMultiplier[0] = w;
-	ms_fScreenMultiplier[1] = h;
+	ms_fScreenMultiplier.x = s.m_bAdjustProportions ? w : 1.0f;
+	ms_fScreenMultiplier.y = s.m_bAdjustProportions ? h : 1.0f;
 };

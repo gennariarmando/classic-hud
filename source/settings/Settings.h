@@ -2,9 +2,7 @@
 #define READ_BOOL(set, a, b, c) a = set[b].asBool(c)
 #define READ_INT(set, a, b, c) a = set[b].asInt(c)
 #define READ_STR(set, a, b, c) a = set[b].asString(c)
-#define READ_FLOAT(set, a, b, c) a = set[b].asFloat(c)
 #define READ_RECT(set, a, b, c) a = set[b].asRect(c)
-#define READ_RGBA(set, a, b, c) a = set[b].asRGBA(c)
 
 #define MAX_BLIPS 300
 
@@ -12,13 +10,19 @@
 
 class Settings {
 public:
+	// Main
 	bool m_bEnable;
 	std::string m_nGameMode, m_nGameModeTemp;
+	bool m_bAdjustProportions;
+
+	// Hud
 	bool bMinimalMoneyCounter;
-	float m_fHudW, m_fHudH;
-	float m_fRadarW, m_fRadarH;
-	float m_fSubsW, m_fSubsH;
+	bool bCrosshairRadius;
+
+	// Radar
+	bool bRectangularRadar;
  
+	// Data
 	CRect m_fClock, m_fClockTemp;
 	CRect m_fMoney, m_fMoneyTemp;
 	CRect m_fHealth, m_fHealthTemp;
@@ -38,28 +42,8 @@ public:
 
 	CRect m_fRadarMap, m_fRadarMapTemp;
 	CRect m_fRadarSprites, m_fRadarSpritesTemp;
+	CRect m_fRadarBlips, m_fRadarBlipsTemp;
 
-
-	CRGBA HUD_COLOUR_CLOCK, HUD_COLOUR_CLOCK_TEMP;
-	CRGBA HUD_COLOUR_CASH, HUD_COLOUR_CASH_TEMP;
-	CRGBA HUD_COLOUR_HEALTH, HUD_COLOUR_HEALTH_TEMP;
-	CRGBA HUD_COLOUR_ARMOUR, HUD_COLOUR_ARMOUR_TEMP;
-	CRGBA HUD_COLOUR_BREATH, HUD_COLOUR_BREATH_TEMP;
-	CRGBA HUD_COLOUR_WEAPON_ICON, HUD_COLOUR_WEAPON_ICON_TEMP;
-	CRGBA HUD_COLOUR_AMMO, HUD_COLOUR_AMMO_TEMP;
-	CRGBA HUD_COLOUR_WANTED_N, HUD_COLOUR_WANTED_A, HUD_COLOUR_WANTED_N_TEMP, HUD_COLOUR_WANTED_A_TEMP;
-	CRGBA HUD_COLOUR_ZONE_NAME, HUD_COLOUR_ZONE_NAME_TEMP;
-	CRGBA HUD_COLOUR_VEHICLE_NAME, HUD_COLOUR_VEHICLE_NAME_TEMP;
-	CRGBA HUD_COLOUR_RADIO_NAME_N, HUD_COLOUR_RADIO_NAME_A, HUD_COLOUR_RADIO_NAME_N_TEMP, HUD_COLOUR_RADIO_NAME_A_TEMP;
-	CRGBA HUD_COLOUR_HELP_TEXT, HUD_COLOUR_HELP_TEXT_TEMP;
-	CRGBA HUD_COLOUR_HELP_BOX, HUD_COLOUR_HELP_BOX_TEMP;
-	CRGBA HUD_COLOUR_SUBTITLES, HUD_COLOUR_SUBTITLES_TEMP;
-	CRGBA HUD_COLOUR_WASTED, HUD_COLOUR_WASTED_TEMP;
-	CRGBA HUD_COLOUR_BUSTED, HUD_COLOUR_BUSTED_TEMP;
-	CRGBA HUD_COLOUR_MISSION_RESULT, HUD_COLOUR_MISSION_RESULT_TEMP;
-	CRGBA HUD_COLOUR_MISSION_TITLE, HUD_COLOUR_MISSION_TITLE_TEMP;
-
-	unsigned int m_nBlipsCounter;
 	char *m_pBlipNames[MAX_BLIPS];
 
 public:

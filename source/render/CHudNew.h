@@ -5,6 +5,8 @@
 #define EDGE_SIZE (2)
 #define AREA_NAME_TIME 3000
 #define VEHICLE_NAME_TIME 3000
+#define HUD_WIDTH_SCALE 0.8f
+#define HUD_HEIGHT_SCALE 0.8f
 
 #include "CSprite2d.h"
 
@@ -19,10 +21,18 @@ enum eSharedSprites {
 	SHARED_TOTALSPRITES
 };
 
+enum eCrosshairsSprites {
+	CROSSHAIR_M16,
+	CROSSHAIR_ROCKET,
+	CROSSHAIR_SNIPER,
+	CROSSHAIRS_TOTALSPRITES
+};
+
 class CHudNew {
 public:
 	static CSprite2d SpritesNew[HUD_TOTALSPRITES];
 	static CSprite2d SharedSprites[SHARED_TOTALSPRITES];
+	static CSprite2d CrosshairSprites[CROSSHAIRS_TOTALSPRITES];
 	static bool ms_bSpritesLoaded;
 
 public:
@@ -53,4 +63,5 @@ private:
 	static void DrawMissionTitle(float x, float y, float w, float h);
 	static void DrawSuccessFailedMessage(float x, float y, float w, float h);
 	static void DrawOddJobMessage(float x, float y, float w, float h);
+	static void DrawCrossHairs();
 };
