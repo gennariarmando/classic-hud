@@ -9,6 +9,10 @@ Mainly meant for Grand Theft Auto: San Andreas.
 - Grand Theft Auto III
 - Grand Theft Auto: Vice City
 - Grand Theft Auto: San Andreas
+- Grand Theft Auto: Liberty City Stories
+- Grand Theft Auto: Vice City Stories
+- Grand Theft Auto: IV
+- Grand Theft Auto: Underground
 
 ### Prerequisites
 - [Premake 5](https://premake.github.io/)
